@@ -1,0 +1,1 @@
+web: gunicorn findPark.wsgi --log-file -
