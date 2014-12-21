@@ -1,4 +1,4 @@
-from django.contrib.gis.db import models
+from django.db import models
 
 # represents a delimited area of the city/town
 class parkingarea(models.Model):
