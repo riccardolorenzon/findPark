@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'rest_framework',
     'django.contrib.gis'
-)dassadasasas
+)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
