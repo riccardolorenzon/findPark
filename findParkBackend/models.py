@@ -41,8 +41,8 @@ class appuser(models.Model):
     models.ManyToManyField(parkingspot, blank=True)
     models.ManyToManyField(transportclass, blank=True)
     #current localization
-    poly = models.PolygonField()
-    objects = models.GeoManager()
+    latitude = models.CharField(max_length=255)
+    longitude = models.CharField(max_length=255)
 
 # represents a passenger
 class passenger(models.Model):
