@@ -15,8 +15,8 @@ class parkingspot(models.Model):
     state = models.CharField(max_length=255)
     laststatechange = models.DateTimeField()
     #spot localization
-    poly = models.PolygonField()
-    objects = models.GeoManager()
+    latitude = models.CharField(max_length=255)
+    longitude = models.CharField(max_length=255)
     #parking area
     area = models.ForeignKey(parkingarea)
     #transport type
@@ -28,8 +28,8 @@ class parkingspothistory(models.Model):
     ready = models.DateTimeField()
     occupied = models.DateTimeField()
     #spot localization
-    poly = models.PolygonField()
-    objects = models.GeoManager()
+    latitude = models.CharField(max_length=255)
+    longitude = models.CharField(max_length=255)
     #parking area
     area = models.ForeignKey(parkingarea)
     #transport type

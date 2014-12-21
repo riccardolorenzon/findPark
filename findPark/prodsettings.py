@@ -38,8 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'findParkBackend',
     'gunicorn',
-    'rest_framework',
-    'django.contrib.gis'
+    'rest_framework'
 )
 
 MIDDLEWARE_CLASSES = (
