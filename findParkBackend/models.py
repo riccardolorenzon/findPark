@@ -49,3 +49,5 @@ class passenger(models.Model):
     code = models.CharField(max_length=255)
     models.ForeignKey(appuser)
 
+
+
