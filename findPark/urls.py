@@ -16,26 +16,29 @@ parkingspot_detail = views.parkingspotviewset.as_view({
     'delete': 'destroy'
 })
 
-area_list = views.areaviewset.as_view({
-    'get': 'list'
+parkingarea_list = views.parkingareaviewset.as_view({
+    'get': 'list',
+    'post': 'create'
 })
 
-area_detail = views.areaviewset.as_view({
+parkingarea_detail = views.parkingareaviewset.as_view({
     'get': 'retrieve'
 })
 
 router = DefaultRouter()
 router.register(r'parkingspots', views.parkingspotviewset)
-router.register(r'areas', views.areaviewset)
+router.register(r'parkingareas', views.parkingareaviewset)
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'findPark.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+
+    url(r'^$', views.index),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^parkingspots/$', parkingspot_list, name='parkingspot-list'),
-    url(r'^parkingspots/(?P<pk>[0-9]+)/$', parkingspot_detail, name='parkingspot-detail'),
-    url(r'^areas/$', area_list, name='area-list'),
-    url(r'^areas/(?P<pk>[0-9]+)/$', area_detail, name='area-detail')
+    url(r'^api/parkingspots/$', parkingspot_list, name='parkingspot-list'),
+    url(r'^api/parkingspots/(?P<pk>[0-9]+)/$', parkingspot_detail, name='parkingspot-detail'),
+    url(r'^api/parkingareas/$', parkingarea_list, name='parkingarea-list'),
+    url(r'^api/parkingareas/(?P<pk>[0-9]+)/$', parkingarea_detail, name='parkingarea-detail')
 )
