@@ -12,7 +12,7 @@ class transportclass(models.Model):
 
 # represents a parking spot on the state <state> starting from <laststatechange>
 class parkingspot(models.Model):
-    state = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
     laststatechange = models.DateTimeField()
     #spot localization
     latitude = models.CharField(max_length=255)
