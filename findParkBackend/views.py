@@ -6,7 +6,7 @@ from serializers import parkingspotserializer, parkingareaserializer
 
 # Create your views here.
 def index(request):
-    return HttpResponse('home page')
+    return render(request, 'home.html', {})
 
 class parkingspotviewset(viewsets.ModelViewSet):
     queryset = parkingspot.objects.all()
