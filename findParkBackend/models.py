@@ -20,7 +20,7 @@ class parkingspot(models.Model):
     #parking area
     area = models.ForeignKey(parkingarea)
     #transport type
-    transportcode = models.ForeignKey(transportclass)
+    transportcode = models.CharField(max_length=255)
 
 # represents the parking spot history, one object is created for each parking vehicle
 class parkingspothistory(models.Model):
@@ -28,12 +28,12 @@ class parkingspothistory(models.Model):
     ready = models.DateTimeField()
     occupied = models.DateTimeField()
     #spot localization
-    latitude = models.CharField(max_length=255)
-    longitude = models.CharField(max_length=255)
+    latitude = models.DecimalField(max_digits=18, decimal_places=8)
+    longitude = models.DecimalField(max_digits=18, decimal_places=8)
     #parking area
     area = models.ForeignKey(parkingarea)
     #transport type
-    transportcode = models.ForeignKey(transportclass)
+    transportcode = models.CharField(max_length=255)
 
 # represent the driver user, this entity
 class appuser(models.Model):
@@ -41,13 +41,16 @@ class appuser(models.Model):
     models.ManyToManyField(parkingspot, blank=True)
     models.ManyToManyField(transportclass, blank=True)
     #current localization
-    latitude = models.CharField(max_length=255)
-    longitude = models.CharField(max_length=255)
+    latitude =  models.DecimalField(max_digits=18, decimal_places=8)
+    longitude =  models.DecimalField(max_digits=18, decimal_places=8)
 
 # represents a passenger
 class passenger(models.Model):
     code = models.CharField(max_length=255)
     models.ForeignKey(appuser)
+
+
+
 
 
 
