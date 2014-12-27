@@ -39,12 +39,13 @@
         <h2>Find your parking and share!</h2>
     </div>
 {% verbatim %}
-    <div class="container-fluid">
+    <div class="container-fluid" ng-controller="mapCtrl">
         <div class="row">
-            <div class="col-md-10" ng-controller="mapCtrl">
+            <div class="col-md-10">
                 <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
             </div>
              <div class="col-md-2">
+                restdata : {{ restData }}
             </div>
         </div>
     </div>

@@ -8,6 +8,10 @@ from serializers import parkingspotserializer, parkingareaserializer
 def index(request):
     return render(request, 'home.html', {})
 
+# proxy service to workaround the CORS problem using gmaps directions api straight from javascript
+def gmapsDirectionProxy(request, origin, destination):
+    pass
+
 class parkingspotviewset(viewsets.ModelViewSet):
     queryset = parkingspot.objects.all()
     serializer_class = parkingspotserializer
@@ -15,3 +19,4 @@ class parkingspotviewset(viewsets.ModelViewSet):
 class parkingareaviewset(viewsets.ModelViewSet):
     queryset = parkingarea.objects.all()
     serializer_class = parkingareaserializer
+
