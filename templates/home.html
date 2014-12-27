@@ -1,13 +1,61 @@
 <!-- SPA application simultaing the behaviour of a set of real applications installed on users' smartphones -->
-<html ng-app>
+{% load staticfiles %}
+<html ng-app ="findPark">
 <head>
+    <script src ="http://code.jquery.com/jquery-2.1.1.js"></script>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src='/bower_components/lodash/dist/lodash.min.js'></script>
+    <script src='/bower_components/angular-google-maps/dist/angular-google-maps.min.js'></script>
+    <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+    <script src="{% static "js/controllers.js" %}"></script>
 </head>
 <body>
+    <style type="text/css">
+         html,
+         body {
+           height: 100%;
+           /* The html and body elements cannot have any padding or margin. */
+         }
+        .centerdiv {
+            margin-top: 50px;
+            text-align: center;
+        }
+        #footer {
+        height: 60px;
+        }
+        #footer {
+        background-color: #f5f5f5;
+        }
+        /* Lastly, apply responsive CSS fixes as necessary */
+        @media (max-width: 767px) {
+            #footer {
+              margin-left: -20px;
+              margin-right: -20px;
+              padding-left: 20px;
+              padding-right: 20px;
+            }
+        }
+        .angular-google-map-container { height: 400px; }
+    </style>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <ul class="nav navbar-nav">
+            {% if user != None and user.username != '' %}
+                <a class="navbar-brand" href="#">{{ user.username }}</a>
+                <li><a href="./logout/">logout</a></li>
+            {% else %}
+                <li><a href="#" data-toggle="modal" data-target="#login">login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="page-header centerdiv">
+        <br>
+        <h1>Welcome to FindParking</h1>
+        <h2>Find your parking and share!</h2>
+    </div>
 {% verbatim %}
-    <p> 3 = {{ 1+2 }}</p>
+    <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
 {% endverbatim %}
 </body>
 </html>

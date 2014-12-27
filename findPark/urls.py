@@ -3,6 +3,8 @@ from django.contrib import admin
 import findParkBackend.views as views
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
+import settings
+from django.conf.urls.static import static
 
 #parkingspot
 parkingspot_list = views.parkingspotviewset.as_view({
@@ -41,4 +43,4 @@ urlpatterns = patterns('',
     url(r'^api/parkingspots/(?P<pk>[0-9]+)/$', parkingspot_detail, name='parkingspot-detail'),
     url(r'^api/parkingareas/$', parkingarea_list, name='parkingarea-list'),
     url(r'^api/parkingareas/(?P<pk>[0-9]+)/$', parkingarea_detail, name='parkingarea-detail')
-)
+)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
