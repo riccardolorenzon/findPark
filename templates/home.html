@@ -9,6 +9,7 @@
     <script src='{% static "bower_components/lodash/dist/lodash.min.js" %} '></script>
     <script src='{% static "bower_components/angular-google-maps/dist/angular-google-maps.min.js" %} '></script>
     <script src="{% static "js/controller.js" %} "></script>
+    <script src="{% static "js/app.js" %} "></script>
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
 </head>
 <body>
@@ -55,7 +56,15 @@
         <h2>Find your parking and share!</h2>
     </div>
 {% verbatim %}
-    <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+    <div ng-controller="mapCtrl">
+        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+        <ul>
+            <li ng-repeat="phone in phones">
+              <span>{{phone.name}}</span>
+              <p>{{phone.snippet}}</p>
+            </li>
+        </ul>
+    </div>
 {% endverbatim %}
 </body>
 </html>
