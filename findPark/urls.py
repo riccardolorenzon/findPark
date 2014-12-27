@@ -4,6 +4,7 @@ import findParkBackend.views as views
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
 import settings
+from findParkBackend import views
 from django.conf.urls.static import static
 
 #parkingspot
@@ -42,5 +43,6 @@ urlpatterns = patterns('',
     url(r'^api/parkingspots/$', parkingspot_list, name='parkingspot-list'),
     url(r'^api/parkingspots/(?P<pk>[0-9]+)/$', parkingspot_detail, name='parkingspot-detail'),
     url(r'^api/parkingareas/$', parkingarea_list, name='parkingarea-list'),
-    url(r'^api/parkingareas/(?P<pk>[0-9]+)/$', parkingarea_detail, name='parkingarea-detail')
+    url(r'^api/parkingareas/(?P<pk>[0-9]+)/$', parkingarea_detail, name='parkingarea-detail'),
+    url(r'^proxy/gmapsdirections/(?P<origin>\w+)/(?P<destination>\w+)/$', views.gmapsDirectionProxy)
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
