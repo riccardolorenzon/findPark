@@ -41,15 +41,15 @@
 {% verbatim %}
     <div class="container-fluid" ng-controller="mapCtrl">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <ui-gmap-google-map center='map.center' zoom='map.zoom'>
                      <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
                         geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
                 </ui-gmap-google-map>
             </div>
-             <div class="col-md-2">
+             <!--<div class="col-md-2">
                 restdata : {{ restData }}
-            </div>
+            </div>-->
         </div>
     </div>
 {% endverbatim %}

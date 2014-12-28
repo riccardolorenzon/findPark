@@ -44,5 +44,5 @@ urlpatterns = patterns('',
     url(r'^api/parkingspots/(?P<pk>[0-9]+)/$', parkingspot_detail, name='parkingspot-detail'),
     url(r'^api/parkingareas/$', parkingarea_list, name='parkingarea-list'),
     url(r'^api/parkingareas/(?P<pk>[0-9]+)/$', parkingarea_detail, name='parkingarea-detail'),
-    url(r'^proxy/gmapsdirections/(?P<origin>\w+)/(?P<destination>\w+)/$', views.gmapsDirectionProxy)
+    url(r'^proxy/gmapsdirections/(?P<origin>.*)/(?P<destination>.*)/$', views.gmapsDirectionProxy)
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
