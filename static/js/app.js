@@ -6,9 +6,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
   // TODO this call is necessary for each point in the simulation
   $scope.paths = [];
   var obj ={};
-
   $scope.polylines = [];
-
 
   function fnsuccess(data, status, id){
       $scope.polylines[id-1] = {};
