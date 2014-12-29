@@ -46,6 +46,7 @@
                      <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
                         geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
                 </ui-gmap-google-map>
+                <button class="btn btn-primary col-md-2" ng-click="startSimulation()">Inizia simulazione</button>
             </div>
              <!--<div class="col-md-2">
                 restdata : {{ restData }}

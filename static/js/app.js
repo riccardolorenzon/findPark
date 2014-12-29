@@ -49,15 +49,11 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
 
                     $scope.paths[id-1].path.push(start_location);
                     $scope.paths[id-1].path.push(end_location);
-                    $scope.polylines[id-1].path.push(start_location);
-                    $scope.polylines[id-1].path.push(end_location);
+
+                    //$scope.polylines[id-1].path.push(start_location);
+                    //$scope.polylines[id-1].path.push(end_location);
                 }
             }
-        }
-
-        var fn = function() {
-            //alert(xpath);
-            $scope.polylines[id-1].path.push(xpath);
         }
 
         /*for (var i = 0; i < $scope.paths.length; i++) {
@@ -65,19 +61,32 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
                 for (var j = 0; j < p.path.length; j++) {
                     xpath = p.path[j];
                     $scope.polylines[id-1].path.push(xpath);
-                    //$timeout(fn, 1000);
                 }
          }*/
-
   }
 
-  $http.get('/proxy/gmapsdirections/Silea+TV/Duomo,+Treviso,+TV/')
-      .success(function(data, status) {
-            fnsuccess(data,status, 1);
-      })
-      .error(function(data, status, headers, config) {
-            $scope.restData = "errore nel ricevimento dati json ";
-      });
+  function sleep(milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+          console.log('working');
+        if ((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
+    }
+
+  $scope.startSimulation = function() {
+      var boh;
+      var boh2;
+      $http.get('/proxy/gmapsdirections/Silea+TV/Duomo,+Treviso,+TV/')
+          .success(function (data, status) {
+            fnsuccess(data, status, 1);
+          })
+          .error(function (data, status, headers, config) {
+              $scope.restData = "errore nel ricevimento dati json ";
+          });
+  }
+  /*
   $http.get('/proxy/gmapsdirections/Carbonera+TV/Palazzo+dei+Trecento,+Treviso,+TV/')
       .success(function(data, status) {
             fnsuccess(data,status, 2);
@@ -85,6 +94,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
       .error(function(data, status, headers, config) {
             $scope.restData = "errore nel ricevimento dati json ";
       });
+
   $http.get('/proxy/gmapsdirections/Dosson+TV/Piazza+dei+Signori,+Treviso,+TV/')
       .success(function(data, status) {
             fnsuccess(data,status, 3);
@@ -92,4 +102,5 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
       .error(function(data, status, headers, config) {
             $scope.restData = "errore nel ricevimento dati json ";
       });
+  */
   });
