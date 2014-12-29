@@ -127,7 +127,16 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $timeout) {
 
                     //$scope.polylines[id-1].path.push(start_location);
                     //$scope.polylines[id-1].path.push(end_location);
+
+                    $scope.alice.coords.latitude = end_location.latitude;
+                    $scope.alice.coords.longitude = end_location.longitude;
                 }
+                 var step = leg.steps[leg.steps.length -1];
+                 end_location = {};
+                 end_location.latitude = step.end_location.lat;
+                 end_location.longitude = step.end_location.lng;
+                 //$scope.alice.coords.latitude = end_location.latitude;
+                 //$scope.alice.coords.longitude = end_location.longitude;
             }
         }
 
