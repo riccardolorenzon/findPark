@@ -46,7 +46,6 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
                     obj.path.push(end_location);
                     */
                     $scope.paths[id-1] = obj;
-
                     $scope.paths[id-1].path.push(start_location);
                     $scope.paths[id-1].path.push(end_location);
 
