@@ -1,12 +1,88 @@
 var findparkApp = angular.module('findPark', ['uiGmapgoogle-maps']);
 
-findparkApp.controller('mapCtrl', function ($scope, $http, $timeout) {
+findparkApp.controller('mapCtrl', function ($scope, $http, $log, $timeout) {
   $scope.map = {center: {latitude: 45.6702345, longitude: 12.2350815 }, zoom: 12, bounds: {}};
   // get directions from <origin> to <destination>
   // TODO this call is necessary for each point in the simulation
   $scope.paths = [];
   var obj ={};
   $scope.polylines = [];
+
+  $scope.alice = {
+      id: 0,
+      coords: {
+        latitude: 45.6702345,
+        longitude: 12.2350815
+      },
+      options: { draggable: false },
+      events: {
+        dragend: function (marker, eventName, args) {
+          $log.log('marker dragend');
+          var lat = marker.getPosition().lat();
+          var lon = marker.getPosition().lng();
+          $log.log(lat);
+          $log.log(lon);
+
+          $scope.alice.options = {
+            draggable: false,
+            labelContent: "lat: " + $scope.alice.coords.latitude + ' ' + 'lon: ' + $scope.alice.coords.longitude,
+            labelAnchor: "100 0",
+            labelClass: "marker-labels"
+          };
+        }
+      }
+    };
+
+    $scope.bob = {
+      id: 0,
+      coords: {
+        latitude: 50.6702345,
+        longitude: 12.2350815
+      },
+      options: { draggable: false },
+      events: {
+        dragend: function (marker, eventName, args) {
+          $log.log('marker dragend');
+          var lat = marker.getPosition().lat();
+          var lon = marker.getPosition().lng();
+          $log.log(lat);
+          $log.log(lon);
+
+          $scope.bob.options = {
+            draggable: false,
+            labelContent: "lat: " + $scope.bob.coords.latitude + ' ' + 'lon: ' + $scope.bob.coords.longitude,
+            labelAnchor: "100 0",
+            labelClass: "marker-labels"
+          };
+        }
+      }
+    };
+
+  $scope.chuck = {
+      id: 0,
+      coords: {
+        latitude: 55.6702345,
+        longitude: 12.2350815
+      },
+      options: { draggable: false },
+      events: {
+        dragend: function (marker, eventName, args) {
+          $log.log('marker dragend');
+          var lat = marker.getPosition().lat();
+          var lon = marker.getPosition().lng();
+          $log.log(lat);
+          $log.log(lon);
+
+          $scope.chuck.options = {
+            draggable: false,
+            labelContent: "lat: " + $scope.chuck.coords.latitude + ' ' + 'lon: ' + $scope.chuck.coords.longitude,
+            labelAnchor: "100 0",
+            labelClass: "marker-labels"
+          };
+        }
+      }
+    };
+
 
   function fnsuccess(data, status, id){
       $scope.polylines[id-1] = {};
