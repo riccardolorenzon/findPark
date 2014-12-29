@@ -135,6 +135,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $timeout) {
                  end_location = {};
                  end_location.latitude = step.end_location.lat;
                  end_location.longitude = step.end_location.lng;
+
                  //$scope.alice.coords.latitude = end_location.latitude;
                  //$scope.alice.coords.longitude = end_location.longitude;
             }
@@ -159,16 +160,20 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $timeout) {
       }
     }
 
+  $scope.jsonAlice = {};
+
   $scope.startSimulation = function() {
       var boh;
       var boh2;
       $http.get('/proxy/gmapsdirections/Silea+TV/Duomo,+Treviso,+TV/')
           .success(function (data, status) {
+            $scope.jsonAlice = JSON.parse(JSON.stringify(data));
             fnsuccess(data, status, 1);
           })
           .error(function (data, status, headers, config) {
               $scope.restData = "errore nel ricevimento dati json ";
           });
+      //TODO timeout function with increasing step number
   }
   /*
   $http.get('/proxy/gmapsdirections/Carbonera+TV/Palazzo+dei+Trecento,+Treviso,+TV/')
