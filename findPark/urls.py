@@ -46,3 +46,8 @@ urlpatterns = patterns('',
     url(r'^api/parkingareas/(?P<pk>[0-9]+)/$', parkingarea_detail, name='parkingarea-detail'),
     url(r'^proxy/gmapsdirections/(?P<origin>.*)/(?P<destination>.*)/$', views.gmapsDirectionProxy)
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if not settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
