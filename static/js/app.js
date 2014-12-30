@@ -1,7 +1,7 @@
 var findparkApp = angular.module('findPark', ['uiGmapgoogle-maps']);
 
-findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
-  $scope.map = {center: {latitude: 45.6702345, longitude: 12.2350815 }, zoom: 12, bounds: {}};
+findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $timeout) {
+  $scope.map = {center: {latitude: 45.4627338, longitude: 9.1777322 }, zoom: 12, bounds: {}};
   // get directions from <origin> to <destination>
   // TODO this call is necessary for each point in the simulation
   $scope.paths = [];
@@ -11,8 +11,8 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
   $scope.alice = {
       id: 0,
       coords: {
-        latitude: 45.6702345,
-        longitude: 12.2350815
+        latitude: 45.4627338,
+        longitude: 9.1777322
       },
       icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
       options: { draggable: false },
@@ -37,8 +37,8 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
     $scope.bob = {
       id: 0,
       coords: {
-        latitude: 50.6702345,
-        longitude: 12.2350815
+        latitude: 45.4627338,
+        longitude: 9.1777322
       },
       options: { draggable: false },
       icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png",
@@ -63,8 +63,8 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
   $scope.chuck = {
       id: 0,
       coords: {
-        latitude: 55.6702345,
-        longitude: 12.2350815
+        latitude: 45.4627338,
+        longitude: 9.1777322
       },
       options: { draggable: false },
       icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png",
@@ -113,6 +113,10 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
 
         marker.coords.latitude = end_location.latitude;
         marker.coords.longitude = end_location.longitude;
+
+
+        $interval($scope.simulation, 1000);
+
   }
 
   function sleep(milliseconds) {
@@ -145,11 +149,11 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
   $scope.jsonChuck = {};
   $scope.stepChuck = 0;
 
-  $scope.simulation = function() {
+  $scope.aliceSimulation = function() {
       $scope.stepAlice = checkStep($scope.jsonAlice, $scope.stepAlice);
       //alice
-      if($scope.stepAlice == 0) {
-          $http.get('/proxy/gmapsdirections/Silea+TV/Duomo,+Treviso,+TV/')
+      if ($scope.stepAlice == 0) {
+          $http.get('/proxy/gmapsdirections/Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano/Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI/')
               .success(function (data, status) {
                   $scope.jsonAlice = JSON.parse(JSON.stringify(data));
                   fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.alice);
@@ -158,17 +162,20 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
                   $scope.restData = "errore nel ricevimento dati json ";
               });
       }
-      else
-      {
+      else {
           fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.alice);
       }
-      $scope.stepAlice +=1;
+      $scope.stepAlice += 1;
 
+      $timeout($scope.aliceSimulation, Math.floor((Math.random() * 5000) + 1));
+  }
+
+  $scope.bobSimulation = function() {
       //bob
 
       $scope.stepBob = checkStep($scope.jsonBob, $scope.stepBob);
-      if($scope.stepBob == 0) {
-          $http.get('/proxy/gmapsdirections/Carbonera+TV/Palazzo+dei+Trecento,+Treviso,+TV/')
+      if ($scope.stepBob == 0) {
+          $http.get('/proxy/gmapsdirections/Porta+Venezia,+Milano/Ticinese,+Milano,+MI/')
               .success(function (data, status) {
                   $scope.jsonBob = JSON.parse(JSON.stringify(data));
                   fnsuccess($scope.jsonBob, status, 1, $scope.stepBob, $scope.bob);
@@ -177,17 +184,20 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
                   $scope.restData = "errore nel ricevimento dati json ";
               });
       }
-      else
-      {
+      else {
           fnsuccess($scope.jsonBob, status, 1, $scope.stepBob, $scope.bob);
       }
-      $scope.stepBob +=1;
+      $scope.stepBob += 1;
 
+      $timeout($scope.bobSimulation, Math.floor((Math.random() * 5000) + 1));
+
+  }
+
+  $scope.chuckSimulation = function() {
       //chuck
-
       $scope.stepChuck = checkStep($scope.jsonChuck, $scope.stepChuck);
       if($scope.stepChuck == 0) {
-          $http.get('/proxy/gmapsdirections/Dosson+TV/Piazza+dei+Signori,+Treviso,+TV/')
+          $http.get('/proxy/gmapsdirections/Parco+Sempione,+Piazza+Sempione,+20154+Milano+MI/Ospedale+Maggiore+Policlinico,+Milano,+MI/')
               .success(function (data, status) {
                   $scope.jsonChuck = JSON.parse(JSON.stringify(data));
                   fnsuccess($scope.jsonChuck, status, 1, $scope.stepChuck, $scope.chuck);
@@ -202,8 +212,15 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval) {
       }
       $scope.stepChuck +=1;
 
+      $timeout($scope.chuckSimulation, Math.floor((Math.random() * 5000) + 1));
+
   }
 
-  $interval($scope.simulation, 1000);
+
+  $timeout($scope.aliceSimulation, 1000);
+  $timeout($scope.bobSimulation, 1000);
+  $timeout($scope.chuckSimulation, 1000);
+
+
 
   });
