@@ -132,6 +132,9 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
   {
     if (typeof  jsonObj.routes == "undefined")
         return 0;
+    if (typeof  jsonObj.routes[0].legs == "undefined")
+        return 0;
+
     if (step == jsonObj.routes[0].legs[0].steps.length - 1)
         {
             return 0;
@@ -139,6 +142,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
     return step;
   };
 
+  var WaitingTimeMax = 1000;
 
   $scope.jsonAlice = {};
   $scope.stepAlice = 0;
@@ -152,7 +156,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
   $scope.aliceSimulation = function() {
       $scope.stepAlice = checkStep($scope.jsonAlice, $scope.stepAlice);
       //alice
-      if ($scope.stepAlice == 0) {
+      if ($scope.stepAlice == 0 || $scope.jsonAlice.routes == []) {
           $http.get('/proxy/gmapsdirections/Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano/Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI/')
               .success(function (data, status) {
                   $scope.jsonAlice = JSON.parse(JSON.stringify(data));
@@ -163,11 +167,18 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
               });
       }
       else {
+
           fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.alice);
       }
       $scope.stepAlice += 1;
-
-      $timeout($scope.aliceSimulation, Math.floor((Math.random() * 5000) + 1));
+      if ($scope.stepAlice % 4 == 0)
+      {
+        // wait a longer period
+        $timeout($scope.aliceSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
+      }
+      else {
+        $timeout($scope.aliceSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
+      }
   }
 
   $scope.bobSimulation = function() {
@@ -188,8 +199,14 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           fnsuccess($scope.jsonBob, status, 1, $scope.stepBob, $scope.bob);
       }
       $scope.stepBob += 1;
-
-      $timeout($scope.bobSimulation, Math.floor((Math.random() * 5000) + 1));
+      if ($scope.stepBob % 4 == 0)
+      {
+        // wait a longer period
+        $timeout($scope.bobSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
+      }
+      else {
+          $timeout($scope.bobSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
+      }
 
   }
 
@@ -211,8 +228,14 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           fnsuccess($scope.jsonChuck, status, 1, $scope.stepChuck, $scope.chuck);
       }
       $scope.stepChuck +=1;
-
-      $timeout($scope.chuckSimulation, Math.floor((Math.random() * 5000) + 1));
+      if ($scope.stepBob % 4 == 0)
+      {
+        // wait a longer period
+        $timeout($scope.chuckSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
+      }
+      else {
+          $timeout($scope.chuckSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
+      }
 
   }
 
