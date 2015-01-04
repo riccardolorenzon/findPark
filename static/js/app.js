@@ -35,15 +35,15 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
     };
 
     $scope.$watch('alice.coords', function (newValue, oldValue, scope) {
-        //TODO
+        $scope.aliceLatestChange = new Date();
     }, true);
 
     $scope.$watch('bob.coords', function (newValue, oldValue, scope) {
-        //TODO
+        $scope.bobLatestChange = new Date();
     }, true);
-    
+
     $scope.$watch('chuck.coords', function (newValue, oldValue, scope) {
-        //TODO
+        $scope.chuckLatestChange = new Date();
     }, true);
 
     $scope.bob = {
@@ -85,8 +85,6 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           $log.log('marker dragend');
           var lat = marker.getPosition().lat();
           var lon = marker.getPosition().lng();
-          $log.log(lat);
-          $log.log(lon);
 
           $scope.chuck.options = {
             draggable: false,
@@ -132,7 +130,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
         $interval($scope.simulation, 1000);
 
-  }
+  };
 
   checkStep = function(jsonObj, step)
   {
@@ -173,7 +171,6 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
               });
       }
       else {
-
           fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.alice);
       }
       $scope.stepAlice += 1;
@@ -185,7 +182,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
       else {
         $timeout($scope.aliceSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
       }
-  }
+  };
 
   $scope.bobSimulation = function() {
       //bob
@@ -214,7 +211,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           $timeout($scope.bobSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
       }
 
-  }
+  };
 
   $scope.chuckSimulation = function() {
       //chuck
@@ -243,13 +240,38 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           $timeout($scope.chuckSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
       }
 
-  }
+  };
+
+  $scope.aliceLatestChange = new Date();
+  $scope.bobLatestChange = new Date();
+  $scope.chuckLatestChange = new Date();
+
+  stopTimeout = 1000;
+
+  $scope.checkDriverPosition = function()
+    {
+        currentTime = new Date();
+        if ($scope.aliceLatestChange - currentTime > stopTimeout)
+        {
+            // alice parked!
+        }
+
+        if ($scope.bobLatestChange - currentTime > stopTimeout)
+        {
+            // bob parked
+        }
+
+        if ($scope.chuckLatestChange - currentTime > stopTimeout)
+        {
+            // chuck parked
+        }
+    };
 
 
   $timeout($scope.aliceSimulation, 1000);
   $timeout($scope.bobSimulation, 1000);
   $timeout($scope.chuckSimulation, 1000);
 
-
+  $interval($scope.checkDriverPosition, 1000);
 
   });
