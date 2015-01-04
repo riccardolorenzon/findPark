@@ -253,7 +253,13 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         currentTime = new Date();
         if ($scope.aliceLatestChange - currentTime > stopTimeout)
         {
-            // alice parked!
+            $http.post('api/parkingspots/')
+              .success(function (data, status) {
+
+              })
+              .error(function (data, status, headers, config) {
+                  $scope.restData = "error on sending data to the server: " + status;
+              });
         }
 
         if ($scope.bobLatestChange - currentTime > stopTimeout)
