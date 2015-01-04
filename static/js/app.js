@@ -34,9 +34,16 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
       }
     };
 
-    $scope.$watch('alice.coords.latitude', function (newValue, oldValue, scope) {
-        // some code to compare the tow arrays, line by line
-        alert('value changed');
+    $scope.$watch('alice.coords', function (newValue, oldValue, scope) {
+        //TODO
+    }, true);
+
+    $scope.$watch('bob.coords', function (newValue, oldValue, scope) {
+        //TODO
+    }, true);
+    
+    $scope.$watch('chuck.coords', function (newValue, oldValue, scope) {
+        //TODO
     }, true);
 
     $scope.bob = {
@@ -93,12 +100,11 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
 
   function fnsuccess(data, status, id, step, marker){
-
         $scope.polylines[id-1] = {};
         $scope.polylines[id-1].id = 1;
         $scope.polylines[id-1].stroke =  {
-        color: '#60' + id + '0FB',
-        weight: 2
+            color: '#60' + id + '0FB',
+            weight: 2
         };
         $scope.polylines[id-1].visible = true;
         $scope.polylines[id-1].path = [];
@@ -109,7 +115,11 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
             weight: 2
         };
         obj.visible = true;
-
+        if (typeof jsonObj.routes == "undefined" )
+        {
+            step = 0;
+            return;
+        }
         var step =  jsonObj.routes[0].legs[0].steps[step];
 
         end_location = {};
