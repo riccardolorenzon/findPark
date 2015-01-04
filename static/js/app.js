@@ -34,6 +34,11 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
       }
     };
 
+    $scope.$watch('alice.coords.latitude', function (newValue, oldValue, scope) {
+        // some code to compare the tow arrays, line by line
+        alert('value changed');
+    }, true);
+
     $scope.bob = {
       id: 0,
       coords: {
