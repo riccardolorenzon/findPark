@@ -39,6 +39,8 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         if (currentTime - $scope.aliceLatestChange > stopTimeout)
         {
             // alice parked
+            console.log("alice parked");
+            $http.post();
         }
 
     }, true);
@@ -47,6 +49,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         currentTime = new Date();
         if (currentTime - $scope.bobLatestChange > stopTimeout)
         {
+            console.log("bob parked");
             // bob parked
         }
     }, true);
@@ -55,6 +58,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         currentTime= new Date();
         if (currentTime - $scope.chuckLatestChange > stopTimeout)
         {
+            console.log("chuck parked");
             // chuck parked
         }
     }, true);
