@@ -40,7 +40,13 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         {
             // alice parked
             console.log("alice parked");
-            $http.post();
+            $http.post('')
+              .success(function (data, status) {
+
+              })
+              .error(function (data, status, headers, config) {
+                  $scope.restData = "error on sending data to the server: " + status;
+              });
         }
 
     }, true);
@@ -262,7 +268,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
   $scope.bobLatestChange = new Date();
   $scope.chuckLatestChange = new Date();
 
-  stopTimeout = 1000;
+  stopTimeout = 2000;
 
   $scope.checkDriverPosition = function()
     {
