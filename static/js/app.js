@@ -186,7 +186,6 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
   $scope.bobSimulation = function() {
       //bob
-
       $scope.stepBob = checkStep($scope.jsonBob, $scope.stepBob);
       if ($scope.stepBob == 0) {
           $http.get('/proxy/gmapsdirections/Porta+Venezia,+Milano/Ticinese,+Milano,+MI/')
