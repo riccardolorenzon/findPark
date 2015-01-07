@@ -35,15 +35,28 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
     };
 
     $scope.$watch('alice.coords', function (newValue, oldValue, scope) {
-        $scope.aliceLatestChange = new Date();
+        currentTime = new Date();
+        if (currentTime - $scope.aliceLatestChange > stopTimeout)
+        {
+            // alice parked
+        }
+
     }, true);
 
     $scope.$watch('bob.coords', function (newValue, oldValue, scope) {
-        $scope.bobLatestChange = new Date();
+        currentTime = new Date();
+        if (currentTime - $scope.bobLatestChange > stopTimeout)
+        {
+            // bob parked
+        }
     }, true);
 
     $scope.$watch('chuck.coords', function (newValue, oldValue, scope) {
-        $scope.chuckLatestChange = new Date();
+        currentTime= new Date();
+        if (currentTime - $scope.chuckLatestChange > stopTimeout)
+        {
+            // chuck parked
+        }
     }, true);
 
     $scope.bob = {
