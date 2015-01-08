@@ -13,14 +13,14 @@ class transportclass(models.Model):
 # represents a parking spot on the state <state> starting from <laststatechange>
 class parkingspot(models.Model):
     status = models.CharField(max_length=255)
-    laststatechange = models.DateTimeField()
+    laststatechange = models.DateTimeField(blank = True, null = True)
     #spot localization
     latitude = models.CharField(max_length=255)
     longitude = models.CharField(max_length=255)
     #parking area
-    area = models.ForeignKey(parkingarea)
+    area = models.ForeignKey(parkingarea, null=True, blank=True, default = None)
     #transport type
-    transportcode = models.CharField(max_length=255)
+    transportcode = models.CharField(max_length=255, blank = True)
 
 # represents the parking spot history, one object is created for each parking vehicle
 class parkingspothistory(models.Model):

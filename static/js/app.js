@@ -36,36 +36,56 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
     $scope.$watch('alice.coords', function (newValue, oldValue, scope) {
         currentTime = new Date();
+
         if (currentTime - $scope.aliceLatestChange > stopTimeout)
         {
             // alice parked
             console.log("alice parked");
-            $http.post('')
+            $http.post('/api/parkingspots/', {status: 'open', 'latitude': $scope.alice.coords.latitude,
+                'longitude' : $scope.alice.coords.longitude, 'area': null })
               .success(function (data, status) {
 
               })
               .error(function (data, status, headers, config) {
                   $scope.restData = "error on sending data to the server: " + status;
               });
+            $scope.aliceLatestChange = currentTime;
         }
 
     }, true);
 
     $scope.$watch('bob.coords', function (newValue, oldValue, scope) {
         currentTime = new Date();
+
         if (currentTime - $scope.bobLatestChange > stopTimeout)
         {
-            console.log("bob parked");
             // bob parked
+            console.log("bob parked");
+            $http.post('/api/parkingspots/', {status: 'open', 'latitude': $scope.bob.coords.latitude,
+                'longitude' : $scope.bob.coords.longitude, 'area': null })
+              .success(function (data, status) {
+              })
+              .error(function (data, status, headers, config) {
+                  $scope.restData = "error on sending data to the server: " + status;
+              });
+            $scope.bobLatestChange = currentTime;
         }
     }, true);
 
     $scope.$watch('chuck.coords', function (newValue, oldValue, scope) {
-        currentTime= new Date();
+        currentTime = new Date();
         if (currentTime - $scope.chuckLatestChange > stopTimeout)
         {
+            // alice parked
             console.log("chuck parked");
-            // chuck parked
+            $http.post('/api/parkingspots/', {status: 'open', 'latitude': $scope.chuck.coords.latitude,
+                'longitude' : $scope.chuck.coords.longitude, 'area': null })
+              .success(function (data, status) {
+              })
+              .error(function (data, status, headers, config) {
+                  $scope.restData = "error on sending data to the server: " + status;
+              });
+            $scope.chuckLatestChange = currentTime;
         }
     }, true);
 
@@ -268,7 +288,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
   $scope.bobLatestChange = new Date();
   $scope.chuckLatestChange = new Date();
 
-  stopTimeout = 2000;
+  stopTimeout = 10000;
 
   $scope.checkDriverPosition = function()
     {

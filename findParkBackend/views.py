@@ -5,6 +5,7 @@ from models import parkingspot, parkingarea
 from serializers import parkingspotserializer, parkingareaserializer
 import urllib2
 import json
+from rest_framework import permissions
 
 # Create your views here.
 def index(request):
@@ -17,6 +18,7 @@ def gmapsDirectionProxy(request, origin, destination):
     return HttpResponse(response, content_type='application/json')
 
 class parkingspotviewset(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
     queryset = parkingspot.objects.all()
     serializer_class = parkingspotserializer
 

@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=255)),
-                ('latitude', models.CharField(max_length=255)),
-                ('longitude', models.CharField(max_length=255)),
+                ('latitude', models.DecimalField(max_digits=18, decimal_places=8)),
+                ('longitude', models.DecimalField(max_digits=18, decimal_places=8)),
             ],
             options={
             },
@@ -37,11 +37,12 @@ class Migration(migrations.Migration):
             name='parkingspot',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('state', models.CharField(max_length=255)),
-                ('laststatechange', models.DateTimeField()),
+                ('status', models.CharField(max_length=255)),
+                ('laststatechange', models.DateTimeField(null=True, blank=True)),
                 ('latitude', models.CharField(max_length=255)),
                 ('longitude', models.CharField(max_length=255)),
-                ('area', models.ForeignKey(to='findParkBackend.parkingarea')),
+                ('transportcode', models.CharField(max_length=255, blank=True)),
+                ('area', models.ForeignKey(default=None, blank=True, to='findParkBackend.parkingarea', null=True)),
             ],
             options={
             },
@@ -54,8 +55,9 @@ class Migration(migrations.Migration):
                 ('state', models.CharField(max_length=255)),
                 ('ready', models.DateTimeField()),
                 ('occupied', models.DateTimeField()),
-                ('latitude', models.CharField(max_length=255)),
-                ('longitude', models.CharField(max_length=255)),
+                ('latitude', models.DecimalField(max_digits=18, decimal_places=8)),
+                ('longitude', models.DecimalField(max_digits=18, decimal_places=8)),
+                ('transportcode', models.CharField(max_length=255)),
                 ('area', models.ForeignKey(to='findParkBackend.parkingarea')),
             ],
             options={
@@ -82,17 +84,5 @@ class Migration(migrations.Migration):
             options={
             },
             bases=(models.Model,),
-        ),
-        migrations.AddField(
-            model_name='parkingspothistory',
-            name='transportcode',
-            field=models.ForeignKey(to='findParkBackend.transportclass'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='parkingspot',
-            name='transportcode',
-            field=models.ForeignKey(to='findParkBackend.transportclass'),
-            preserve_default=True,
         ),
     ]
