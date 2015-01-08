@@ -2,13 +2,13 @@ var findparkApp = angular.module('findPark', ['uiGmapgoogle-maps']);
 
 findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $timeout) {
   $scope.map = {center: {latitude: 45.4627338, longitude: 9.1777322 }, zoom: 12, bounds: {}};
-  // get directions from <origin> to <destination>
-  // TODO this call is necessary for each point in the simulation
   $scope.paths = [];
   var obj ={};
-  $scope.polylines = [];
+  $scope.drivers = [];
+  var num_drivers = 3;
+  var driver_obj = {};
 
-  $scope.alice = {
+    var alice = {
       id: 0,
       coords: {
         latitude: 45.4627338,
@@ -31,29 +31,83 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
             labelClass: "marker-labels"
           };
         }
-      }
-    };
+      }};
 
-    $scope.$watch('alice.coords', function (newValue, oldValue, scope) {
-        currentTime = new Date();
+      var bob = {
+          id: 0,
+          coords: {
+            latitude: 45.4627338,
+            longitude: 9.1777322
+          },
+          options: { draggable: false },
+          icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png",
+          events: {
+            dragend: function (marker, eventName, args) {
+              $log.log('marker dragend');
+              var lat = marker.getPosition().lat();
+              var lon = marker.getPosition().lng();
+              $log.log(lat);
+              $log.log(lon);
 
-        if (currentTime - $scope.aliceLatestChange > stopTimeout)
-        {
-            // alice parked
-            console.log("alice parked");
-            $http.post('/api/parkingspots/', {status: 'open', 'latitude': $scope.alice.coords.latitude,
-                'longitude' : $scope.alice.coords.longitude, 'area': null })
-              .success(function (data, status) {
+              $scope.bob.options = {
+                draggable: false,
+                labelContent: "lat: " + $scope.bob.coords.latitude + ' ' + 'lon: ' + $scope.bob.coords.longitude,
+                labelAnchor: "100 0",
+                labelClass: "marker-labels"
+              };
+            }
+          }
+        };
 
-              })
-              .error(function (data, status, headers, config) {
-                  $scope.restData = "error on sending data to the server: " + status;
-              });
-            $scope.aliceLatestChange = currentTime;
-        }
+        var chuck = {
+          id: 0,
+          coords: {
+            latitude: 45.4627338,
+            longitude: 9.1777322
+          },
+          options: { draggable: false },
+          icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png",
+          events: {
+            dragend: function (marker, eventName, args) {
+              $log.log('marker dragend');
+              var lat = marker.getPosition().lat();
+              var lon = marker.getPosition().lng();
 
-    }, true);
+              $scope.chuck.options = {
+                draggable: false,
+                labelContent: "lat: " + $scope.chuck.coords.latitude + ' ' + 'lon: ' + $scope.chuck.coords.longitude,
+                labelAnchor: "100 0",
+                labelClass: "marker-labels"
+              };
+            }
+          }
+        };
+      $scope.drivers.push(alice);
+      $scope.drivers.push(bob);
+      $scope.drivers.push(chuck);
 
+    for (i = 0; i++; i< num_drivers)
+    {
+        driver = $scope.drivers[i];
+        $scope.$watch('driver.coords', function (newValue, oldValue, scope) {
+            currentTime = new Date();
+            if (currentTime - $scope.aliceLatestChange > stopTimeout)
+            {
+                // i-th driver parked
+                console.log("driver number "+ i + ": parked");
+                $http.post('/api/parkingspots/', {status: 'open', 'latitude': driver.coords.latitude,
+                    'longitude' : driver.coords.longitude, 'area': null })
+                  .success(function (data, status) {
+                  })
+                  .error(function (data, status, headers, config) {
+                      $scope.restData = "error on sending data to the server: " + status;
+                  });
+                $scope.aliceLatestChange = currentTime;
+            }
+        }, true);
+
+    }
+/*
     $scope.$watch('bob.coords', function (newValue, oldValue, scope) {
         currentTime = new Date();
 
@@ -89,66 +143,8 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         }
     }, true);
 
-    $scope.bob = {
-      id: 0,
-      coords: {
-        latitude: 45.4627338,
-        longitude: 9.1777322
-      },
-      options: { draggable: false },
-      icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png",
-      events: {
-        dragend: function (marker, eventName, args) {
-          $log.log('marker dragend');
-          var lat = marker.getPosition().lat();
-          var lon = marker.getPosition().lng();
-          $log.log(lat);
-          $log.log(lon);
-
-          $scope.bob.options = {
-            draggable: false,
-            labelContent: "lat: " + $scope.bob.coords.latitude + ' ' + 'lon: ' + $scope.bob.coords.longitude,
-            labelAnchor: "100 0",
-            labelClass: "marker-labels"
-          };
-        }
-      }
-    };
-
-  $scope.chuck = {
-      id: 0,
-      coords: {
-        latitude: 45.4627338,
-        longitude: 9.1777322
-      },
-      options: { draggable: false },
-      icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png",
-      events: {
-        dragend: function (marker, eventName, args) {
-          $log.log('marker dragend');
-          var lat = marker.getPosition().lat();
-          var lon = marker.getPosition().lng();
-
-          $scope.chuck.options = {
-            draggable: false,
-            labelContent: "lat: " + $scope.chuck.coords.latitude + ' ' + 'lon: ' + $scope.chuck.coords.longitude,
-            labelAnchor: "100 0",
-            labelClass: "marker-labels"
-          };
-        }
-      }
-    };
-
-
+*/
   function fnsuccess(data, status, id, step, marker){
-        $scope.polylines[id-1] = {};
-        $scope.polylines[id-1].id = 1;
-        $scope.polylines[id-1].stroke =  {
-            color: '#60' + id + '0FB',
-            weight: 2
-        };
-        $scope.polylines[id-1].visible = true;
-        $scope.polylines[id-1].path = [];
         var jsonObj = data; //JSON.parse(JSON.stringify(data));
         obj.id = id;
         obj.stroke =  {
@@ -169,8 +165,6 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
         marker.coords.latitude = end_location.latitude;
         marker.coords.longitude = end_location.longitude;
-
-
         $interval($scope.simulation, 1000);
 
   };
@@ -207,14 +201,14 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           $http.get('/proxy/gmapsdirections/Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano/Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI/')
               .success(function (data, status) {
                   $scope.jsonAlice = JSON.parse(JSON.stringify(data));
-                  fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.alice);
+                  fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.drivers[0]);
               })
               .error(function (data, status, headers, config) {
                   $scope.restData = "errore nel ricevimento dati json ";
               });
       }
       else {
-          fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.alice);
+          fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.drivers[0]);
       }
       $scope.stepAlice += 1;
       if ($scope.stepAlice % 4 == 0)
@@ -226,7 +220,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
         $timeout($scope.aliceSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
       }
   };
-
+/*
   $scope.bobSimulation = function() {
       //bob
       $scope.stepBob = checkStep($scope.jsonBob, $scope.stepBob);
@@ -283,7 +277,7 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
       }
 
   };
-
+*/
   $scope.aliceLatestChange = new Date();
   $scope.bobLatestChange = new Date();
   $scope.chuckLatestChange = new Date();
@@ -317,9 +311,10 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
 
   $timeout($scope.aliceSimulation, 1000);
+    /*
   $timeout($scope.bobSimulation, 1000);
   $timeout($scope.chuckSimulation, 1000);
-
+  */
   $interval($scope.checkDriverPosition, 1000);
 
   });
