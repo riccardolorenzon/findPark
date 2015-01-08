@@ -5,17 +5,43 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
   $scope.paths = [];
   var obj ={};
   $scope.drivers = [];
+  $scope.drivers_details = [];
   var num_drivers = 3;
   var driver_obj = {};
 
-    var alice = {
+        var alice = {
+            id: 0,
+            coords: {
+            latitude: 45.4627338,
+            longitude: 9.1777322
+            },
+            icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
+            options: { draggable: false },
+            events: {
+            dragend: function (marker, eventName, args) {
+            $log.log('marker dragend');
+            var lat = marker.getPosition().lat();
+            var lon = marker.getPosition().lng();
+            $log.log(lat);
+            $log.log(lon);
+
+            $scope.alice.options = {
+            draggable: false,
+            labelContent: "lat: " + $scope.alice.coords.latitude + ' ' + 'lon: ' + $scope.alice.coords.longitude,
+            labelAnchor: "100 0",
+            labelClass: "marker-labels"
+            };
+            }
+        }};
+
+      var bob = {
       id: 0,
       coords: {
         latitude: 45.4627338,
         longitude: 9.1777322
       },
-      icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
       options: { draggable: false },
+      icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png",
       events: {
         dragend: function (marker, eventName, args) {
           $log.log('marker dragend');
@@ -24,74 +50,59 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
           $log.log(lat);
           $log.log(lon);
 
-          $scope.alice.options = {
+          $scope.bob.options = {
             draggable: false,
-            labelContent: "lat: " + $scope.alice.coords.latitude + ' ' + 'lon: ' + $scope.alice.coords.longitude,
+            labelContent: "lat: " + $scope.bob.coords.latitude + ' ' + 'lon: ' + $scope.bob.coords.longitude,
             labelAnchor: "100 0",
             labelClass: "marker-labels"
           };
         }
-      }};
+      }
+    };
 
-      var bob = {
-          id: 0,
-          coords: {
-            latitude: 45.4627338,
-            longitude: 9.1777322
-          },
-          options: { draggable: false },
-          icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png",
-          events: {
-            dragend: function (marker, eventName, args) {
-              $log.log('marker dragend');
-              var lat = marker.getPosition().lat();
-              var lon = marker.getPosition().lng();
-              $log.log(lat);
-              $log.log(lon);
+    var chuck = {
+      id: 0,
+      coords: {
+        latitude: 45.4627338,
+        longitude: 9.1777322
+      },
+      options: { draggable: false },
+      icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png",
+      events: {
+        dragend: function (marker, eventName, args) {
+          $log.log('marker dragend');
+          var lat = marker.getPosition().lat();
+          var lon = marker.getPosition().lng();
 
-              $scope.bob.options = {
-                draggable: false,
-                labelContent: "lat: " + $scope.bob.coords.latitude + ' ' + 'lon: ' + $scope.bob.coords.longitude,
-                labelAnchor: "100 0",
-                labelClass: "marker-labels"
-              };
-            }
-          }
-        };
+          $scope.chuck.options = {
+            draggable: false,
+            labelContent: "lat: " + $scope.chuck.coords.latitude + ' ' + 'lon: ' + $scope.chuck.coords.longitude,
+            labelAnchor: "100 0",
+            labelClass: "marker-labels"
+          };
+        }
+      }
+    };
+    $scope.drivers.push(alice);
 
-        var chuck = {
-          id: 0,
-          coords: {
-            latitude: 45.4627338,
-            longitude: 9.1777322
-          },
-          options: { draggable: false },
-          icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png",
-          events: {
-            dragend: function (marker, eventName, args) {
-              $log.log('marker dragend');
-              var lat = marker.getPosition().lat();
-              var lon = marker.getPosition().lng();
+    $scope.drivers.push(bob);
+    $scope.drivers.push(chuck);
 
-              $scope.chuck.options = {
-                draggable: false,
-                labelContent: "lat: " + $scope.chuck.coords.latitude + ' ' + 'lon: ' + $scope.chuck.coords.longitude,
-                labelAnchor: "100 0",
-                labelClass: "marker-labels"
-              };
-            }
-          }
-        };
-      $scope.drivers.push(alice);
-      $scope.drivers.push(bob);
-      $scope.drivers.push(chuck);
+    var details = {};
+    details.json = {};
+    details.step = 0;
+    details.latestChange = new Date();
+
+    $scope.drivers_details.push(details);
+    $scope.drivers_details.push(details);
+    $scope.drivers_details.push(details);
 
     for (i = 0; i++; i< num_drivers)
     {
         driver = $scope.drivers[i];
         $scope.$watch('driver.coords', function (newValue, oldValue, scope) {
             currentTime = new Date();
-            if (currentTime - $scope.aliceLatestChange > stopTimeout)
+            if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout)
             {
                 // i-th driver parked
                 console.log("driver number "+ i + ": parked");
@@ -102,49 +113,12 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
                   .error(function (data, status, headers, config) {
                       $scope.restData = "error on sending data to the server: " + status;
                   });
-                $scope.aliceLatestChange = currentTime;
+                $scope.driver_details[i].latestChange = currentTime;
             }
         }, true);
-
     }
-/*
-    $scope.$watch('bob.coords', function (newValue, oldValue, scope) {
-        currentTime = new Date();
 
-        if (currentTime - $scope.bobLatestChange > stopTimeout)
-        {
-            // bob parked
-            console.log("bob parked");
-            $http.post('/api/parkingspots/', {status: 'open', 'latitude': $scope.bob.coords.latitude,
-                'longitude' : $scope.bob.coords.longitude, 'area': null })
-              .success(function (data, status) {
-              })
-              .error(function (data, status, headers, config) {
-                  $scope.restData = "error on sending data to the server: " + status;
-              });
-            $scope.bobLatestChange = currentTime;
-        }
-    }, true);
-
-    $scope.$watch('chuck.coords', function (newValue, oldValue, scope) {
-        currentTime = new Date();
-        if (currentTime - $scope.chuckLatestChange > stopTimeout)
-        {
-            // alice parked
-            console.log("chuck parked");
-            $http.post('/api/parkingspots/', {status: 'open', 'latitude': $scope.chuck.coords.latitude,
-                'longitude' : $scope.chuck.coords.longitude, 'area': null })
-              .success(function (data, status) {
-              })
-              .error(function (data, status, headers, config) {
-                  $scope.restData = "error on sending data to the server: " + status;
-              });
-            $scope.chuckLatestChange = currentTime;
-        }
-    }, true);
-
-*/
-  function fnsuccess(data, status, id, step, marker){
+  function fnsuccess(data, status, id, step, marker, index){
         var jsonObj = data; //JSON.parse(JSON.stringify(data));
         obj.id = id;
         obj.stroke =  {
@@ -165,14 +139,15 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
         marker.coords.latitude = end_location.latitude;
         marker.coords.longitude = end_location.longitude;
-        $interval($scope.simulation, 1000);
 
+        $interval(function() {$scope.simulation(index);}, 1000);
   };
 
   checkStep = function(jsonObj, step)
   {
     if (typeof  jsonObj.routes == "undefined")
         return 0;
+
     if (typeof  jsonObj.routes[0].legs == "undefined")
         return 0;
 
@@ -185,136 +160,54 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
 
   var WaitingTimeMax = 1000;
 
-  $scope.jsonAlice = {};
-  $scope.stepAlice = 0;
+  $scope.simulation = function(index) {
+      driver = $scope.drivers[index];
+      driver_details = $scope.drivers_details[index];
+      driver_details.step = checkStep(driver_details.json, driver_details.step);
 
-  $scope.jsonBob = {};
-  $scope.stepBob = 0;
-
-  $scope.jsonChuck = {};
-  $scope.stepChuck = 0;
-
-  $scope.aliceSimulation = function() {
-      $scope.stepAlice = checkStep($scope.jsonAlice, $scope.stepAlice);
-      //alice
-      if ($scope.stepAlice == 0 || $scope.jsonAlice.routes == []) {
+      if (driver_details.step == 0 || driver_details.json.routes == []) {
           $http.get('/proxy/gmapsdirections/Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano/Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI/')
               .success(function (data, status) {
-                  $scope.jsonAlice = JSON.parse(JSON.stringify(data));
-                  fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.drivers[0]);
+                  driver_details.json = JSON.parse(JSON.stringify(data));
+                  fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
               })
               .error(function (data, status, headers, config) {
                   $scope.restData = "errore nel ricevimento dati json ";
               });
       }
       else {
-          fnsuccess($scope.jsonAlice, status, 1, $scope.stepAlice, $scope.drivers[0]);
-      }
-      $scope.stepAlice += 1;
-      if ($scope.stepAlice % 4 == 0)
-      {
-        // wait a longer period
-        $timeout($scope.aliceSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
-      }
-      else {
-        $timeout($scope.aliceSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
-      }
-  };
-/*
-  $scope.bobSimulation = function() {
-      //bob
-      $scope.stepBob = checkStep($scope.jsonBob, $scope.stepBob);
-      if ($scope.stepBob == 0) {
-          $http.get('/proxy/gmapsdirections/Porta+Venezia,+Milano/Ticinese,+Milano,+MI/')
-              .success(function (data, status) {
-                  $scope.jsonBob = JSON.parse(JSON.stringify(data));
-                  fnsuccess($scope.jsonBob, status, 1, $scope.stepBob, $scope.bob);
-              })
-              .error(function (data, status, headers, config) {
-                  $scope.restData = "errore nel ricevimento dati json ";
-              });
-      }
-      else {
-          fnsuccess($scope.jsonBob, status, 1, $scope.stepBob, $scope.bob);
-      }
-      $scope.stepBob += 1;
-      if ($scope.stepBob % 4 == 0)
-      {
-        // wait a longer period
-        $timeout($scope.bobSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
-      }
-      else {
-          $timeout($scope.bobSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
+          fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
       }
 
-  };
-
-  $scope.chuckSimulation = function() {
-      //chuck
-      $scope.stepChuck = checkStep($scope.jsonChuck, $scope.stepChuck);
-      if($scope.stepChuck == 0) {
-          $http.get('/proxy/gmapsdirections/Parco+Sempione,+Piazza+Sempione,+20154+Milano+MI/Ospedale+Maggiore+Policlinico,+Milano,+MI/')
-              .success(function (data, status) {
-                  $scope.jsonChuck = JSON.parse(JSON.stringify(data));
-                  fnsuccess($scope.jsonChuck, status, 1, $scope.stepChuck, $scope.chuck);
-              })
-              .error(function (data, status, headers, config) {
-                  $scope.restData = "errore nel ricevimento dati json ";
-              });
-      }
-      else
-      {
-          fnsuccess($scope.jsonChuck, status, 1, $scope.stepChuck, $scope.chuck);
-      }
-      $scope.stepChuck +=1;
-      if ($scope.stepBob % 4 == 0)
+      driver.step += 1;
+      if (driver.step % 4 == 0)
       {
         // wait a longer period
-        $timeout($scope.chuckSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
+        $timeout(function(){ $scope.simulation(index); }, Math.floor((Math.random() * WaitingTimeMax) + 1) * 10);
       }
       else {
-          $timeout($scope.chuckSimulation, Math.floor((Math.random() * WaitingTimeMax) + 1));
+        $timeout(function(){ $scope.simulation(index); }, Math.floor((Math.random() * WaitingTimeMax) + 1));
       }
-
   };
-*/
-  $scope.aliceLatestChange = new Date();
-  $scope.bobLatestChange = new Date();
-  $scope.chuckLatestChange = new Date();
 
   stopTimeout = 10000;
-
-  $scope.checkDriverPosition = function()
-    {
-        currentTime = new Date();
-        if ($scope.aliceLatestChange - currentTime > stopTimeout)
-        {
-            $http.post('api/parkingspots/')
-              .success(function (data, status) {
-
-              })
-              .error(function (data, status, headers, config) {
-                  $scope.restData = "error on sending data to the server: " + status;
-              });
-        }
-
-        if ($scope.bobLatestChange - currentTime > stopTimeout)
-        {
-            // bob parked
-        }
-
-        if ($scope.chuckLatestChange - currentTime > stopTimeout)
-        {
-            // chuck parked
-        }
-    };
+  driver = $scope.drivers[0];
+  driver_details = $scope.drivers_details[0];
+  $timeout(function(){ $scope.simulation(0); }, 1000);
 
 
-  $timeout($scope.aliceSimulation, 1000);
-    /*
-  $timeout($scope.bobSimulation, 1000);
-  $timeout($scope.chuckSimulation, 1000);
-  */
-  $interval($scope.checkDriverPosition, 1000);
+  driver = $scope.drivers[1];
+  driver_details = $scope.drivers_details[1];
+  $timeout(function(){ $scope.simulation(1); }, 1000);
+
+
+  driver = $scope.drivers[1];
+  driver_details = $scope.drivers_details[2];
+  $timeout(function(){ $scope.simulation(2); }, 1000);
+
+  for (i = 0; i< num_drivers; i++)
+  {
+
+  }
 
   });
