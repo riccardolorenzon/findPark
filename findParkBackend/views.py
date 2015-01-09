@@ -19,10 +19,13 @@ def gmapsDirectionProxy(request, origin, destination):
 
 class parkingspotviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
+
     queryset = parkingspot.objects.all()
     serializer_class = parkingspotserializer
 
 class parkingareaviewset(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+
     queryset = parkingarea.objects.all()
     serializer_class = parkingareaserializer
 

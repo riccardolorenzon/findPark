@@ -84,7 +84,6 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
       }
     };
     $scope.drivers.push(alice);
-
     $scope.drivers.push(bob);
     $scope.drivers.push(chuck);
 
@@ -190,24 +189,12 @@ findparkApp.controller('mapCtrl', function ($scope, $http, $log, $interval, $tim
       }
   };
 
-  stopTimeout = 10000;
-  driver = $scope.drivers[0];
-  driver_details = $scope.drivers_details[0];
-  $timeout(function(){ $scope.simulation(0); }, 1000);
-
-
-  driver = $scope.drivers[1];
-  driver_details = $scope.drivers_details[1];
-  $timeout(function(){ $scope.simulation(1); }, 1000);
-
-
-  driver = $scope.drivers[1];
-  driver_details = $scope.drivers_details[2];
-  $timeout(function(){ $scope.simulation(2); }, 1000);
-
   for (i = 0; i< num_drivers; i++)
   {
-
+      stopTimeout = 10000;
+      driver = $scope.drivers[i];
+      driver_details = $scope.drivers_details[i];
+      $timeout(function(){ $scope.simulation(0); }, 1000);
   }
 
   });
