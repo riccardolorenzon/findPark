@@ -10,15 +10,17 @@ findparkApp.config(function(uiGmapGoogleMapApiProvider) {
 
 findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $timeout, uiGmapGoogleMapApi) {
     uiGmapGoogleMapApi.then(function (maps) {
-        $scope.map = {center: {latitude: 45.4627338, longitude: 9.1777322 }, zoom: 12, bounds: {}};
+        $scope.map = {center: {latitude: 45.4627338, longitude: 9.1777322 }, zoom: 12};
 
     // given bounds and center i need to find random points between the fist and the third quarter of the cartesian plane
     // lat [+90, -90] longitude [+180, -180]
     // Average point between 2 points, formula based on Talete theorem
+        /*
     var firtsQuarterPointX = $scope.map.bounds.northeast.longitude + $scope.map.center.longitude / 2;
     var firtsQuarterPointY = $scope.map.bounds.northeast.latitude + $scope.map.center.latitude / 2;
     var thirdQuarterPointX = $scope.map.bounds.southwest.longitude + $scope.map.center.longitude / 2;
     var thirdQuarterPointY = $scope.map.bounds.southwest.latitude + $scope.map.center.latitude / 2;
+    */
 
     $scope.paths = [];
     var obj = {};
@@ -26,20 +28,21 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     $scope.drivers_details = [];
     var num_drivers = 3;
     var driver_obj = {};
+
     var alice = {
         id: 0,
         coords: {
-            latitude: firtsQuarterPointX,
-            longitude: firtsQuarterPointY
+            latitude: 45.4627338,
+            longitude: 9.1777322
         },
         icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
         options: {
             draggable: false,
-            labelContent: "lat: " + $scope.alice.coords.latitude + ' ' + 'lon: ' + $scope.alice.coords.longitude,
             labelAnchor: "100 0",
             labelClass: "marker-labels"
         },
         events: {
+            bounds_changed : function() {alert('dio can');}
         }
     };
     var bob = {
@@ -50,7 +53,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         },
         options: {
             draggable: false,
-            labelContent: "lat: " + $scope.bob.coords.latitude + ' ' + 'lon: ' + $scope.bob.coords.longitude,
             labelAnchor: "100 0",
             labelClass: "marker-labels"
         },
@@ -66,7 +68,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         },
         options: {
             draggable: false,
-            labelContent: "lat: " + $scope.chuck.coords.latitude + ' ' + 'lon: ' + $scope.chuck.coords.longitude,
             labelAnchor: "100 0",
             labelClass: "marker-labels"
         },
@@ -84,16 +85,16 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     details.latestChange = new Date();
 
     var point = {'latitude': -90 + 180 * Math.random(), 'longitude': -180 + 360 * Math.random()};
-    details.start = thirdQuarterPointX;
-    details.end = thirdQuarterPointY;
+    details.start = "Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano";
+    details.end = "Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI";
 
     $scope.drivers_details.push(details);
     $scope.drivers_details.push(details);
     $scope.drivers_details.push(details);
 
-    for (i = 0; i++; i < num_drivers) {
+    for (i = 0; i < num_drivers; i++) {
         driver = $scope.drivers[i];
-        $scope.$watch('driver.coords', function (newValue, oldValue, scope) {
+        $scope.$watch('$scope.drivers[i].coords', function (newValue, oldValue, scope) {
             currentTime = new Date();
             if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
                 // i-th driver parked
@@ -182,7 +183,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     };
 
 
-    stopTimeout = 10000;
+    stopTimeout = 1000;
     driver = $scope.drivers[0];
 
     driver_details = $scope.drivers_details[0];
