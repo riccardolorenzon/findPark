@@ -11,7 +11,13 @@ function getRandomColor() {
 
 // random location
 function getRandomLocation(northeastpoint, southwestpoint, center){
-
+      var lat_min = 0; lat_min = southwestpoint.latitude;
+      var lat_range = 0;  lat_range = northeastpoint.latitude - lat_min;
+      var lng_min = 0; lng_min = southwestpoint.longitude;
+      var lng_range = 0; lng_range = northeastpoint.longitude - lng_min;
+      var final_lat = lat_min + (Math.random() * lat_range);
+      var final_lng = lng_min + (Math.random() * lng_range);
+  return final_lat + "," + final_lng;
 }
 
 var findparkApp = angular.module('findPark', ['uiGmapgoogle-maps']);
@@ -29,7 +35,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     $scope.map = {
         center: {latitude: 45.4627338, longitude: 9.1777322 },
         zoom: 12,
-        bounds: {northeast: {latitude: 45.4627338, longitude: 9.1777322}, southwest: {latitude: 45.4627338, longitude: 9.1777322}},
+        bounds: {northeast: {latitude: 45.5237590, longitude: 9.2087530}, southwest: {latitude: 45.4217120, longitude: 9.1067110}},
         events: {
             bounds_changed :
                 function(e){
@@ -57,14 +63,13 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
 
     for (i = 0; i < num_drivers; i++)
     {
-
         var details = {};
         details.json = {};
         details.step = 0;
         details.latestChange = new Date();
         var point = {'latitude': -90 + 180 * Math.random(), 'longitude': -180 + 360 * Math.random()};
-        details.start = "Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano";
-        details.end = "Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI";
+        details.start = getRandomLocation($scope.map.bounds.northeast, $scope.map.bounds.southwest, $scope.map.center);
+        details.end = getRandomLocation($scope.map.bounds.northeast, $scope.map.bounds.southwest, $scope.map.center);
 
         $scope.drivers_details.push(details);
         var obj = {
@@ -122,10 +127,10 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             step = 0;
             return;
         }
-        var step = jsonObj.routes[0].legs[0].steps[step];
+        var stepObj = jsonObj.routes[0].legs[0].steps[step];
         end_location = {};
-        end_location.latitude = step.end_location.lat;
-        end_location.longitude = step.end_location.lng;
+        end_location.latitude = stepObj.end_location.lat;
+        end_location.longitude = stepObj.end_location.lng;
         marker.coords.latitude = end_location.latitude;
         marker.coords.longitude = end_location.longitude;
         if (step % 4 == 0) {
@@ -154,7 +159,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         return step;
     };
 
-    var WaitingTimeMax = 10000;
+    var WaitingTimeMax = 2000;
 
     $scope.simulation = function (index) {
         driver = $scope.drivers[index];
@@ -164,7 +169,12 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
-                    fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
+
+                    if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
+                    {
+                        fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
+                    }
+
                 })
                 .error(function (data, status, headers, config) {
                     $scope.restData = "errore nel ricevimento dati json ";
