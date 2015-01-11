@@ -42,7 +42,7 @@
     <div class="container-fluid" ng-controller="mapCtrl">
         <div class="row">
             <div class="col-md-12 col-sd-6">
-                <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+                <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.events" bounds ="map.bounds">
 
                     <ui-gmap-marker ng-repeat="driver in drivers" coords="driver.coords" options="driver.options" events="driver.events" idkey="driver.id"
                             icon= "driver.icon">

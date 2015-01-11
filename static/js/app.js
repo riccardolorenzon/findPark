@@ -10,17 +10,27 @@ findparkApp.config(function(uiGmapGoogleMapApiProvider) {
 
 findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $timeout, uiGmapGoogleMapApi) {
     uiGmapGoogleMapApi.then(function (maps) {
-        $scope.map = {center: {latitude: 45.4627338, longitude: 9.1777322 }, zoom: 12};
+    $scope.map = {
+        center: {latitude: 45.4627338, longitude: 9.1777322 },
+        zoom: 12,
+        bounds: {northeast: {latitude: 45.4627338, longitude: 9.1777322}, southwest: {latitude: 45.4627338, longitude: 9.1777322}},
+        events: {
+            bounds_changed :
+                function(e){
+                    //alert(e.bounds.northeast.latitude);
+                    //alert($scope.map.bounds);
+                    //TODO: trigger new drivers creations based on new bounds
+                }
+        }
+    };
 
     // given bounds and center i need to find random points between the fist and the third quarter of the cartesian plane
     // lat [+90, -90] longitude [+180, -180]
     // Average point between 2 points, formula based on Talete theorem
-        /*
     var firtsQuarterPointX = $scope.map.bounds.northeast.longitude + $scope.map.center.longitude / 2;
     var firtsQuarterPointY = $scope.map.bounds.northeast.latitude + $scope.map.center.latitude / 2;
     var thirdQuarterPointX = $scope.map.bounds.southwest.longitude + $scope.map.center.longitude / 2;
     var thirdQuarterPointY = $scope.map.bounds.southwest.latitude + $scope.map.center.latitude / 2;
-    */
 
     $scope.paths = [];
     var obj = {};
@@ -28,6 +38,24 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     $scope.drivers_details = [];
     var num_drivers = 3;
     var driver_obj = {};
+
+    for (i = 0; i < num_drivers; i++)
+    {
+        var obj = {
+            id: 0,
+            coords: {
+                latitude: 45.4627338,
+                longitude: 9.1777322
+            },
+            icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
+            options: {
+                draggable: false,
+                labelAnchor: "100 0",
+                labelClass: "marker-labels"
+            }
+        }
+        $scope.drivers.push(obj);
+    }
 
     var alice = {
         id: 0,
@@ -40,9 +68,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             draggable: false,
             labelAnchor: "100 0",
             labelClass: "marker-labels"
-        },
-        events: {
-            bounds_changed : function() {alert('dio can');}
         }
     };
     var bob = {
@@ -177,11 +202,9 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         else {
             fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
         }
-
         $scope.drivers_details[index].step += 1;
 
     };
-
 
     stopTimeout = 1000;
     driver = $scope.drivers[0];
