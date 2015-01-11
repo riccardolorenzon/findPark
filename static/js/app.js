@@ -1,3 +1,19 @@
+// js functions
+// returns one random color, used for a specific driver's marker
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+};
+
+// random location
+function getRandomLocation(northeastpoint, southwestpoint, center){
+
+}
+
 var findparkApp = angular.module('findPark', ['uiGmapgoogle-maps']);
 
 findparkApp.config(function(uiGmapGoogleMapApiProvider) {
@@ -36,18 +52,34 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     var obj = {};
     $scope.drivers = [];
     $scope.drivers_details = [];
-    var num_drivers = 3;
+    var num_drivers = 10;
     var driver_obj = {};
 
     for (i = 0; i < num_drivers; i++)
     {
+
+        var details = {};
+        details.json = {};
+        details.step = 0;
+        details.latestChange = new Date();
+        var point = {'latitude': -90 + 180 * Math.random(), 'longitude': -180 + 360 * Math.random()};
+        details.start = "Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano";
+        details.end = "Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI";
+
+        $scope.drivers_details.push(details);
         var obj = {
             id: 0,
             coords: {
                 latitude: 45.4627338,
                 longitude: 9.1777322
             },
-            icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8.5,
+                fillColor: getRandomColor(),
+                fillOpacity: 1,
+                strokeWeight: 0.4
+            },
             options: {
                 draggable: false,
                 labelAnchor: "100 0",
@@ -57,70 +89,12 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         $scope.drivers.push(obj);
     }
 
-    var alice = {
-        id: 0,
-        coords: {
-            latitude: 45.4627338,
-            longitude: 9.1777322
-        },
-        icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png",
-        options: {
-            draggable: false,
-            labelAnchor: "100 0",
-            labelClass: "marker-labels"
-        }
-    };
-    var bob = {
-        id: 0,
-        coords: {
-            latitude: 45.4627338,
-            longitude: 9.1777322
-        },
-        options: {
-            draggable: false,
-            labelAnchor: "100 0",
-            labelClass: "marker-labels"
-        },
-        icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png",
-        events: {}
-    };
-
-    var chuck = {
-        id: 0,
-        coords: {
-            latitude: 45.4627338,
-            longitude: 9.1777322
-        },
-        options: {
-            draggable: false,
-            labelAnchor: "100 0",
-            labelClass: "marker-labels"
-        },
-        icon: "http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png",
-        events: {}
-    };
-
-    $scope.drivers.push(alice);
-    $scope.drivers.push(bob);
-    $scope.drivers.push(chuck);
-
-    var details = {};
-    details.json = {};
-    details.step = 0;
-    details.latestChange = new Date();
-
-    var point = {'latitude': -90 + 180 * Math.random(), 'longitude': -180 + 360 * Math.random()};
-    details.start = "Porta+Ticinese,+Piazza+24+Maggio,+20136+Milano";
-    details.end = "Porta+Garibaldi,+Piazza+XXV+Aprile,+Milano,+MI";
-
-    $scope.drivers_details.push(details);
-    $scope.drivers_details.push(details);
-    $scope.drivers_details.push(details);
-
-    for (i = 0; i < num_drivers; i++) {
+     for (i = 0; i < num_drivers; i++) {
         driver = $scope.drivers[i];
         $scope.$watch('$scope.drivers[i].coords', function (newValue, oldValue, scope) {
             currentTime = new Date();
+            if (typeof $scope.drivers_details[i] == "undefined")
+                return;
             if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
                 // i-th driver parked
                 console.log("driver number " + i + ": parked");
@@ -149,14 +123,11 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             return;
         }
         var step = jsonObj.routes[0].legs[0].steps[step];
-
         end_location = {};
         end_location.latitude = step.end_location.lat;
         end_location.longitude = step.end_location.lng;
-
         marker.coords.latitude = end_location.latitude;
         marker.coords.longitude = end_location.longitude;
-
         if (step % 4 == 0) {
             // wait a longer period to the next iteration
             $timeout(function () {
@@ -207,30 +178,12 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     };
 
     stopTimeout = 1000;
-    driver = $scope.drivers[0];
 
-    driver_details = $scope.drivers_details[0];
-    $timeout(function () {
-        $scope.simulation(0);
-    }, 1000);
-
-    driver = $scope.drivers[1];
-
-    driver_details = $scope.drivers_details[1];
-    $timeout(function () {
-        $scope.simulation(1);
-    }, 1000);
-
-    driver = $scope.drivers[2];
-
-    driver_details = $scope.drivers_details[2];
-    $timeout(function () {
-        $scope.simulation(2);
-    }, 1000);
-    for (i = 0; i < num_drivers; i++) {
+    for (i = 0; i< num_drivers; i++)
+    {
+        driver = $scope.drivers[i];
+        driver_details = $scope.drivers_details[i];
+        $scope.simulation(i);
     }
     });
-
-
-
   });
