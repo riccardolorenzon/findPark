@@ -34,6 +34,12 @@ function getRandomLocations(northeastpoint, southwestpoint, center){
   return [st,en];
 }
 
+isEmpty = function(obj) {
+        for (var prop in obj) if (this.hasOwnProperty(obj)) return false;
+        return true;
+    };
+
+
 var findparkApp = angular.module('findPark', ['uiGmapgoogle-maps']);
 
 findparkApp.config(function(uiGmapGoogleMapApiProvider) {
@@ -72,7 +78,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     var obj = {};
     $scope.drivers = [];
     $scope.drivers_details = [];
-    var num_drivers = 10;
+    var num_drivers = 2;
     var driver_obj = {};
 
     for (i = 0; i < num_drivers; i++)
@@ -132,14 +138,10 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         }, true);
     }
 
-    function fnsuccess(data, status, id, step, marker, index) {
-        var jsonObj = data;
-        obj.id = id;
-        obj.stroke = {
-            color: '#60' + id + '0FB',
-            weight: 2
-        };
-        obj.visible = true;
+    function fnsuccess(driver_details, driver, index) {
+        console.log("fnsuccess");
+        var jsonObj = driver_details.json;
+        var step = driver_details.step;
         if (typeof jsonObj.routes == "undefined") {
             step = 0;
             return;
@@ -149,8 +151,8 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             end_location = {};
             end_location.latitude = stepObj.end_location.lat;
             end_location.longitude = stepObj.end_location.lng;
-            marker.coords.latitude = end_location.latitude;
-            marker.coords.longitude = end_location.longitude;
+            driver.coords.latitude = end_location.latitude;
+            driver.coords.longitude = end_location.longitude;
         }
         if (step % 4 == 0) {
             // wait a longer period to the next iteration
@@ -181,37 +183,42 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         return step;
     };
 
-    var WaitingTimeMax = 2000;
 
     $scope.simulation = function (index) {
         driver = $scope.drivers[index];
         driver_details = $scope.drivers_details[index];
         $scope.drivers_details[index].step = checkStep(driver_details.json, driver_details.step);
-        if (driver_details.step == 0 || driver_details.json.routes == []) {
+
+        console.log("starting simulation for driver : " + index + " step " + $scope.drivers_details[index].step);
+        if (isEmpty(driver_details.json)) {
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
                     //if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     {
-                        fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
+
+                        fnsuccess(driver_details, driver, index);
                     }
                     else{
                         //console.log('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/' + "no routes!");
-                        }
+                    }
                 })
                 .error(function (data, status, headers, config) {
                     $scope.restData = "errore nel ricevimento dati json ";
                 });
         }
         else {
-            fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
+            console.log(driver_details.json);
+            console.log($scope.drivers_details[index].step);
+            fnsuccess(driver_details, driver, index);
         }
         $scope.drivers_details[index].step += 1;
-
+        console.log("end simulation for driver : " + index);
     };
 
-    stopTimeout = 1000;
+    var WaitingTimeMax = 100;
+    var stopTimeout = 100;
 
     for (i = 0; i< num_drivers; i++)
     {
