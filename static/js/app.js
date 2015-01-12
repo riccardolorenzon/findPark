@@ -78,7 +78,9 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     var obj = {};
     $scope.drivers = [];
     $scope.drivers_details = [];
-    var num_drivers = 2;
+        
+    // more than 4 => GAPI OVER_QUERY_LIMIT(that is 10QPS)
+    var num_drivers = 4;
     var driver_obj = {};
 
     for (i = 0; i < num_drivers; i++)
@@ -142,7 +144,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         console.log("fnsuccess");
         var jsonObj = driver_details.json;
         var step = driver_details.step;
-        if (typeof jsonObj.routes == "undefined") {
+        if (typeof jsonObj.routes[0] == "undefined") {
             step = 0;
             return;
         }
@@ -188,20 +190,18 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         driver = $scope.drivers[index];
         driver_details = $scope.drivers_details[index];
         $scope.drivers_details[index].step = checkStep(driver_details.json, driver_details.step);
-
-        console.log("starting simulation for driver : " + index + " step " + $scope.drivers_details[index].step);
-        if (isEmpty(driver_details.json)) {
+        if (typeof driver_details.json.routes == "undefined") {
+            console.log("request..");
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
                     //if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     {
-
                         fnsuccess(driver_details, driver, index);
                     }
                     else{
-                        //console.log('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/' + "no routes!");
+                        console.log(driver_details.json.status);
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -209,12 +209,9 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                 });
         }
         else {
-            console.log(driver_details.json);
-            console.log($scope.drivers_details[index].step);
             fnsuccess(driver_details, driver, index);
         }
         $scope.drivers_details[index].step += 1;
-        console.log("end simulation for driver : " + index);
     };
 
     var WaitingTimeMax = 100;
