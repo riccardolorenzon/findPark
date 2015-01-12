@@ -191,6 +191,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
+                    //if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     {
                         fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
