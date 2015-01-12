@@ -85,7 +85,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         points = getRandomLocations($scope.map.bounds.northeast, $scope.map.bounds.southwest, $scope.map.center);
         details.start = points[0];
         details.end = points[1];
-        console.log(points[0] + " " + points[1]);
+        //console.log(points[0] + " " + points[1]);
         $scope.drivers_details.push(details);
         var obj = {
             id: 0,
@@ -197,7 +197,8 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                         fnsuccess(driver_details.json, status, 1, driver_details.step, driver, index);
                     }
                     else{
-                        console.log('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/' + "no routes!");}
+                        //console.log('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/' + "no routes!");
+                        }
                 })
                 .error(function (data, status, headers, config) {
                     $scope.restData = "errore nel ricevimento dati json ";
