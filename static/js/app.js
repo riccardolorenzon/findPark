@@ -50,6 +50,12 @@ findparkApp.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 
+findparkApp.controller('driverController', function ($scope, $log) {
+     $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
+        console.log("watching you! " + newVal);
+     });
+});
+
 findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $timeout, uiGmapGoogleMapApi) {
     uiGmapGoogleMapApi.then(function (maps) {
     $scope.map = {
@@ -80,7 +86,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     $scope.drivers_details = [];
 
     // more than 4 => GAPI OVER_QUERY_LIMIT(that is 10QPS)
-    var num_drivers = 100;
+    var num_drivers = 5;
     var driver_obj = {};
 
     for (i = 0; i < num_drivers; i++)
@@ -94,7 +100,8 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         details.start = points[0];
         details.end = points[1];
         //console.log(points[0] + " " + points[1]);
-        $scope.drivers_details.push(details);
+        $scope.drivers_details.push(details)
+        ;
         var obj = {
             id: 0,
             coords: {
@@ -117,14 +124,20 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         $scope.drivers.push(obj);
     }
 
-     for (i = 0; i < num_drivers; i++) {
-        driver = $scope.drivers[i];
-        $scope.$watch('$scope.drivers[i].coords.latitude', function (newValue, oldValue, scope) {
-            console.log($scope.drivers[i]);
+     //for (i = 0; i < num_drivers; i++) {
+
+        $scope.rental_dates = [
+                {start_time: "8:00", stop_time: "18:00"},
+                {start_time: "9:00", stop_time: "21:00"}
+              ];
+
+
+            /*
+            console.log(newVal.coords);
             currentTime = new Date();
-            if (typeof $scope.drivers_details[i] == "undefined")
+            if (typeof $scope.drivers_details[0] == "undefined")
                 return;
-            if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
+            if (currentTime - $scope.drivers_details[0].latestChange > stopTimeout) {
                 // i-th driver parked
                 console.log("driver number " + i + ": parked");
                 $http.post('/api/parkingspots/', {status: 'open',
@@ -136,10 +149,10 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                     .error(function (data, status, headers, config) {
                         $scope.restData = "error on sending data to the server: " + status;
                     });
-                $scope.driver_details[i].latestChange = currentTime;
+                $scope.drivers_details[0].latestChange = currentTime;
             }
-        }, true);
-    }
+        }, true);*/
+
 
     function fnsuccess(driver_details, driver, index) {
         var jsonObj = driver_details.json;
@@ -191,7 +204,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         driver_details = $scope.drivers_details[index];
         $scope.drivers_details[index].step = checkStep(driver_details.json, driver_details.step);
         if (typeof driver_details.json.routes == "undefined") {
-            console.log("request..");
+            //console.log("request..");
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
@@ -202,7 +215,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                     }
                     else{
                         // if G requests actually exceeded 10rps try again in 2 seconds
-                        $timeout(function(){$scope.simulation(index)}, Math.random() * 4000);
+                        $timeout(function(){$scope.simulation(index)}, Math.random() * 10000);
                         console.log(driver_details.json.status);
                     }
                 })

@@ -44,7 +44,7 @@
             <div class="col-md-12 col-sd-6">
                 <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.events" bounds ="map.bounds">
 
-                    <ui-gmap-marker ng-repeat="driver in drivers" coords="driver.coords" options="driver.options" events="driver.events" idkey="driver.id"
+                    <ui-gmap-marker ng-repeat="driver in drivers" ng-controller="driverController" coords="driver.coords" options="driver.options" events="driver.events" idkey="driver.id"
                             icon= "driver.icon">
                     <!--<ui-gmap-marker coords="alice.coords" options="alice.options" events="alice.events" idkey="alice.id"
                             icon= "alice.icon">
@@ -59,6 +59,7 @@
                 restdata : {{ restData }}
             </div>-->
         </div>
+
     </div>
 {% endverbatim %}
     <br>
