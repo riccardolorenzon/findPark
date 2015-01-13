@@ -57,7 +57,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
-    'PAGINATE_BY': 10
+    'PAGINATE_BY': 10,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 ROOT_URLCONF = 'findPark.urls'
