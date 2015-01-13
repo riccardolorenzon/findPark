@@ -78,9 +78,9 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     var obj = {};
     $scope.drivers = [];
     $scope.drivers_details = [];
-        
+
     // more than 4 => GAPI OVER_QUERY_LIMIT(that is 10QPS)
-    var num_drivers = 4;
+    var num_drivers = 100;
     var driver_obj = {};
 
     for (i = 0; i < num_drivers; i++)
@@ -119,7 +119,8 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
 
      for (i = 0; i < num_drivers; i++) {
         driver = $scope.drivers[i];
-        $scope.$watch('$scope.drivers[i].coords', function (newValue, oldValue, scope) {
+        $scope.$watch('$scope.drivers[i].coords.latitude', function (newValue, oldValue, scope) {
+            console.log($scope.drivers[i]);
             currentTime = new Date();
             if (typeof $scope.drivers_details[i] == "undefined")
                 return;
@@ -141,7 +142,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     }
 
     function fnsuccess(driver_details, driver, index) {
-        console.log("fnsuccess");
         var jsonObj = driver_details.json;
         var step = driver_details.step;
         if (typeof jsonObj.routes[0] == "undefined") {
@@ -201,6 +201,8 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                         fnsuccess(driver_details, driver, index);
                     }
                     else{
+                        // if G requests actually exceeded 10rps try again in 2 seconds
+                        $timeout(function(){$scope.simulation(index)}, Math.random() * 4000);
                         console.log(driver_details.json.status);
                     }
                 })

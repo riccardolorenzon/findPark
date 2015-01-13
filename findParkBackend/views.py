@@ -13,13 +13,13 @@ def index(request):
 
 # proxy service to workaround the CORS problem using gmaps directions api straight from javascript
 def gmapsDirectionProxy(request, origin, destination):
+    OVER_QUERY_LIMIT = True
     url = "http://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&sensor=false"
     response = urllib2.urlopen(url)
     return HttpResponse(response, content_type='application/json')
 
 class parkingspotviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-
     queryset = parkingspot.objects.all()
     serializer_class = parkingspotserializer
 
