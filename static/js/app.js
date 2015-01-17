@@ -50,10 +50,27 @@ findparkApp.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 
-findparkApp.controller('driverController', function ($scope, $log) {
+findparkApp.controller('driverController', function ($scope, $log, $http) {
+     var stopTimeout = 1000;
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
-        console.log("watching you! " + newVal);
-     });
+        currentTime = new Date();
+        if (typeof $scope.drivers_details[0] == "undefined")
+            return;
+        if (currentTime - $scope.drivers_details[0].latestChange > stopTimeout) {
+            // i-th driver parked
+            console.log("driver number " + i + ": parked");
+            $http.post('/api/parkingspots/', {status: 'open',
+                'latitude': driver.coords.latitude,
+                'longitude': driver.coords.longitude, 'area': null })
+                .success(function (data, status) {
+
+                })
+                .error(function (data, status, headers, config) {
+                    $scope.restData = "error on sending data to the server: " + status;
+                });
+            $scope.drivers_details[0].latestChange = currentTime;
+        }
+        }, true);
 });
 
 findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $timeout, uiGmapGoogleMapApi) {
@@ -124,35 +141,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         $scope.drivers.push(obj);
     }
 
-     //for (i = 0; i < num_drivers; i++) {
-
-        $scope.rental_dates = [
-                {start_time: "8:00", stop_time: "18:00"},
-                {start_time: "9:00", stop_time: "21:00"}
-              ];
-
-
-            /*
-            console.log(newVal.coords);
-            currentTime = new Date();
-            if (typeof $scope.drivers_details[0] == "undefined")
-                return;
-            if (currentTime - $scope.drivers_details[0].latestChange > stopTimeout) {
-                // i-th driver parked
-                console.log("driver number " + i + ": parked");
-                $http.post('/api/parkingspots/', {status: 'open',
-                    'latitude': driver.coords.latitude,
-                    'longitude': driver.coords.longitude, 'area': null })
-                    .success(function (data, status) {
-
-                    })
-                    .error(function (data, status, headers, config) {
-                        $scope.restData = "error on sending data to the server: " + status;
-                    });
-                $scope.drivers_details[0].latestChange = currentTime;
-            }
-        }, true);*/
-
 
     function fnsuccess(driver_details, driver, index) {
         var jsonObj = driver_details.json;
@@ -220,7 +208,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                     }
                 })
                 .error(function (data, status, headers, config) {
-                    $scope.restData = "errore nel ricevimento dati json ";
+                    console.log("errore nel ricevimento dati json ");
                 });
         }
         else {
@@ -230,7 +218,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     };
 
     var WaitingTimeMax = 100;
-    var stopTimeout = 100;
 
     for (i = 0; i< num_drivers; i++)
     {

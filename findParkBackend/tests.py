@@ -15,3 +15,4 @@ class ParkingSpotsTests(APITestCase):
                     'latitude': '0.000',
                     'longitude': '1.000', 'area': None }, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
