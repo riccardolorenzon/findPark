@@ -6,6 +6,7 @@ from serializers import parkingspotserializer, parkingareaserializer
 import urllib2
 import json
 from rest_framework import permissions
+from rest_framework import status
 
 # Create your views here.
 def index(request):
@@ -22,6 +23,22 @@ class parkingspotviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = parkingspot.objects.all()
     serializer_class = parkingspotserializer
+    def create(self, request):
+        """
+            Overrides the create method in order to get
+            extra params: the id of the created object.
+            When this is done, we pass the method to his parent.
+        """
+        serializer = parkingspotserializer(data= request.data)
+        if serializer.is_valid():
+            parking_spot = serializer.create(request.data)
+            parking_spot.save()
+            return HttpResponse(json.dumps({'id' : parking_spot.id}),
+                            status=status.HTTP_201_CREATED, content_type="application/json")
+        else:
+            return HttpResponse(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST, content_type="application/json")
+
 
 class parkingareaviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)

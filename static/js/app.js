@@ -51,7 +51,7 @@ findparkApp.config(function(uiGmapGoogleMapApiProvider) {
 });
 
 findparkApp.controller('driverController', function ($scope, $log, $http) {
-     var stopTimeout = 1000;
+     var stopTimeout = 5000;
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
         currentTime = new Date();
         if (typeof $scope.drivers_details[0] == "undefined")
