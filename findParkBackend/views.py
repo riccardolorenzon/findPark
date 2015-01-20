@@ -31,7 +31,7 @@ class parkingspotviewset(viewsets.ModelViewSet):
         """
         serializer = parkingspotserializer(data= request.data)
         if serializer.is_valid():
-            parking_spot = serializer.create(request.data)
+            parking_spot = serializer.create(serializer.validated_data)
             parking_spot.save()
             return HttpResponse(json.dumps({'id' : parking_spot.id}),
                             status=status.HTTP_201_CREATED, content_type="application/json")

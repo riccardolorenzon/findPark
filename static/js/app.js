@@ -1,5 +1,7 @@
 // js functions
 // returns one random color, used for a specific driver's marker
+
+
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
@@ -62,9 +64,7 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
             $http.post('/api/parkingspots/', {status: 'open',
                 'latitude': driver.coords.latitude,
                 'longitude': driver.coords.longitude, 'area': null })
-                .success(function (data, status) {
-
-                })
+                .success(function (data, status){})
                 .error(function (data, status, headers, config) {
                     $scope.restData = "error on sending data to the server: " + status;
                 });
@@ -192,7 +192,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         driver_details = $scope.drivers_details[index];
         $scope.drivers_details[index].step = checkStep(driver_details.json, driver_details.step);
         if (typeof driver_details.json.routes == "undefined") {
-            //console.log("request..");
+
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
