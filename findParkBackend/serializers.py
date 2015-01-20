@@ -8,9 +8,6 @@ class parkingspotserializer(serializers.HyperlinkedModelSerializer):
         queryset = parkingarea.objects.all(), view_name='parkingarea-detail', format='json', allow_null=True)
 
     def validate_status(self, value):
-        """
-        Check that the blog post is about Django.
-        """
         if value.lower() not in ['open', 'closed']:
             raise serializers.ValidationError("error on status value: <possible choices are: open, closed> ")
         return value

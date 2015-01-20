@@ -25,7 +25,6 @@ class parkingspotviewset(viewsets.ModelViewSet):
 
 class parkingareaviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-
     queryset = parkingarea.objects.all()
     serializer_class = parkingareaserializer
 
