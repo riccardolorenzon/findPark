@@ -1,7 +1,5 @@
 // js functions
 // returns one random color, used for a specific driver's marker
-
-
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
@@ -55,21 +53,9 @@ findparkApp.config(function(uiGmapGoogleMapApiProvider) {
 findparkApp.controller('driverController', function ($scope, $log, $http) {
      var stopTimeout = 5000;
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
-        currentTime = new Date();
-        if (typeof $scope.drivers_details[0] == "undefined")
-            return;
-        if (currentTime - $scope.drivers_details[0].latestChange > stopTimeout) {
-            // i-th driver parked
-            console.log("driver number " + i + ": parked");
-            $http.post('/api/parkingspots/', {status: 'open',
-                'latitude': driver.coords.latitude,
-                'longitude': driver.coords.longitude, 'area': null })
-                .success(function (data, status){})
-                .error(function (data, status, headers, config) {
-                    $scope.restData = "error on sending data to the server: " + status;
-                });
-            $scope.drivers_details[0].latestChange = currentTime;
-        }
+        currentTime = new Date().getTime();
+        $scope.drivers_details[0].latestChange = currentTime;
+         console.log("latest change changed");
         }, true);
 });
 
@@ -103,7 +89,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     $scope.drivers_details = [];
 
     // more than 4 => GAPI OVER_QUERY_LIMIT(that is 10QPS)
-    var num_drivers = 5;
+    var num_drivers = 1;
     var driver_obj = {};
 
     for (i = 0; i < num_drivers; i++)
@@ -111,12 +97,12 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         var details = {};
         details.json = {};
         details.step = 0;
-        details.latestChange = new Date();
+        details.latestChange = new Date().getTime();
         var point = {'latitude': -90 + 180 * Math.random(), 'longitude': -180 + 360 * Math.random()};
         points = getRandomLocations($scope.map.bounds.northeast, $scope.map.bounds.southwest, $scope.map.center);
         details.start = points[0];
         details.end = points[1];
-        //console.log(points[0] + " " + points[1]);
+        details.driver_id = null;
         $scope.drivers_details.push(details)
         ;
         var obj = {
@@ -141,6 +127,30 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         $scope.drivers.push(obj);
     }
 
+    //check called each checkinginterval period
+    function checkDriversPosition()
+    {
+        console.log("checking drivers' position");
+        currentTime = new Date().getTime();
+        for ( i = 0; i < num_drivers; i++) {
+            if (typeof $scope.drivers_details[i] == "undefined")
+                return;
+
+            console.log(currentTime - $scope.drivers_details[i].latestChange);
+            if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
+                // i-th driver parked
+                $http.post('/api/parkingspots/', {status: 'open',
+                    'latitude': driver.coords.latitude,
+                    'longitude': driver.coords.longitude, 'area': null })
+                    .success(function (data, status) {
+                        update_details(data.id);
+                    })
+                    .error(function (data, status, headers, config) {
+                        $scope.restData = "error on sending data to the server: " + status;
+                    });
+            }
+        }
+    }
 
     function fnsuccess(driver_details, driver, index) {
         var jsonObj = driver_details.json;
@@ -186,17 +196,14 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         return step;
     };
 
-
     $scope.simulation = function (index) {
         driver = $scope.drivers[index];
         driver_details = $scope.drivers_details[index];
         $scope.drivers_details[index].step = checkStep(driver_details.json, driver_details.step);
         if (typeof driver_details.json.routes == "undefined") {
-
             $http.get('/proxy/gmapsdirections/' + driver_details.start + '/' + driver_details.end + '/')
                 .success(function (data, status) {
                     driver_details.json = JSON.parse(JSON.stringify(data));
-                    //if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     if (driver_details.json.status != "ZERO_RESULTS" && typeof driver_details.json.routes[0] != "undefined" )
                     {
                         fnsuccess(driver_details, driver, index);
@@ -217,13 +224,22 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         $scope.drivers_details[index].step += 1;
     };
 
-    var WaitingTimeMax = 100;
+    var WaitingTimeMax = 1000;
 
+    // check interval(in seconds)
+    var checkingInterval = 1000;
+
+    var stopTimeout = 100;
+
+    // start all drivers
     for (i = 0; i< num_drivers; i++)
     {
         driver = $scope.drivers[i];
         driver_details = $scope.drivers_details[i];
         $scope.simulation(i);
     }
+    // set up check function
+    $interval(checkDriversPosition, checkingInterval);
+
     });
   });
