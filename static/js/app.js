@@ -89,8 +89,10 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     $scope.drivers_details = [];
 
     // more than 4 => GAPI OVER_QUERY_LIMIT(that is 10QPS)
-    var num_drivers = 1;
+    var num_drivers = 2;
     var driver_obj = {};
+
+
 
     for (i = 0; i < num_drivers; i++)
     {
@@ -135,7 +137,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         for ( i = 0; i < num_drivers; i++) {
             if (typeof $scope.drivers_details[i] == "undefined")
                 return;
-
             console.log(currentTime - $scope.drivers_details[i].latestChange);
             if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
                 // i-th driver parked
@@ -143,7 +144,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                     'latitude': driver.coords.latitude,
                     'longitude': driver.coords.longitude, 'area': null })
                     .success(function (data, status) {
-                        update_details(data.id);
+                        //update_details(data.id);
                     })
                     .error(function (data, status, headers, config) {
                         $scope.restData = "error on sending data to the server: " + status;

@@ -1,7 +1,7 @@
 __author__ = 'riccardo'
 from django.forms import widgets
 from rest_framework import serializers
-from models import parkingspot, parkingarea, transportclass
+from models import parkingspot, parkingarea, transportclass, appuser
 
 class parkingspotserializer(serializers.HyperlinkedModelSerializer):
     area = serializers.HyperlinkedRelatedField(
@@ -21,3 +21,9 @@ class parkingareaserializer(serializers.HyperlinkedModelSerializer):
         model = parkingarea
         fields = ('code', 'description')
 
+
+class appiuserserializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = appuser
+        fields = ('code', 'parkingspots', 'transportclasses', 'latitude', 'longitude')
+        read_only_fields = ('parkingspots', 'transportclasses')

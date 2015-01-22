@@ -35,11 +35,11 @@ class parkingspothistory(models.Model):
     #transport type
     transportcode = models.CharField(max_length=255)
 
-# represent the driver user, this entity
+# represent the driver user
 class appuser(models.Model):
     code = models.CharField(max_length=255)
-    models.ManyToManyField(parkingspot, blank=True)
-    models.ManyToManyField(transportclass, blank=True)
+    parkingspots = models.ManyToManyField(parkingspot, through='Parking', blank=True)
+    transportclasses = models.ManyToManyField(transportclass, through='Driving', blank=True)
     #current localization
     latitude =  models.DecimalField(max_digits=18, decimal_places=8)
     longitude =  models.DecimalField(max_digits=18, decimal_places=8)
@@ -48,6 +48,15 @@ class appuser(models.Model):
 class passenger(models.Model):
     code = models.CharField(max_length=255)
     models.ForeignKey(appuser)
+
+class Parking(models.Model):
+    appuserfield = models.ForeignKey(appuser)
+    parkingspotfield = models.ForeignKey(parkingspot)
+
+class Driving(models.Model):
+    appuserfield = models.ForeignKey(appuser)
+    transportclassfield = models.ForeignKey(transportclass)
+
 
 
 
