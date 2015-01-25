@@ -17,21 +17,21 @@ function getRandomLocations(northeastpoint, southwestpoint, center){
       var lng_range = 0; lng_range = northeastpoint.longitude - lng_min;
       var final_lat = lat_min + (Math.random() * lat_range);
       var final_lng = lng_min + (Math.random() * lng_range);
-  places =
-      ['Via+Tortona,+20144+Milano',
-       'Via+Galeazzo+Alessi,+20123+Milano',
-       'Corso+Monforte,+Milano',
-       'Via+Paolo+Sarpi,+Milano',
-       'Via+Felice+Casati,+Milano',
-       'Via+Bergamo,+Milano'
-  ];
-  index1 = Math.floor(Math.random() * 6);
-  st = places[index1];
-  places.splice(index1, 1);
-  index2 = Math.floor(Math.random() * 5);
-  en = places[index2];
+      places =
+          ['Via+Tortona,+20144+Milano',
+           'Via+Galeazzo+Alessi,+20123+Milano',
+           'Corso+Monforte,+Milano',
+           'Via+Paolo+Sarpi,+Milano',
+           'Via+Felice+Casati,+Milano',
+           'Via+Bergamo,+Milano'
+      ];
+      index1 = Math.floor(Math.random() * 6);
+      st = places[index1];
+      places.splice(index1, 1);
+      index2 = Math.floor(Math.random() * 5);
+      en = places[index2];
 
-  return [st,en];
+      return [st,en];
 }
 
 isEmpty = function(obj) {
@@ -92,8 +92,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     var num_drivers = 2;
     var driver_obj = {};
 
-
-
     for (i = 0; i < num_drivers; i++)
     {
         var details = {};
@@ -105,8 +103,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         details.start = points[0];
         details.end = points[1];
         details.driver_id = null;
-        $scope.drivers_details.push(details)
-        ;
+        $scope.drivers_details.push(details);
         var obj = {
             id: 0,
             coords: {
