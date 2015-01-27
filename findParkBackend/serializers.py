@@ -22,7 +22,7 @@ class parkingareaserializer(serializers.HyperlinkedModelSerializer):
         fields = ('code', 'description')
 
 
-class appiuserserializer(serializers.HyperlinkedModelSerializer):
+class appuserserializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = appuser
         fields = ('code', 'parkingspots', 'transportclasses', 'latitude', 'longitude')

@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse
 from rest_framework import viewsets
 from rest_framework.response import Response
 from models import parkingspot, parkingarea, appuser
-from serializers import parkingspotserializer, parkingareaserializer
+from serializers import parkingspotserializer, parkingareaserializer, appuserserializer
 import urllib2
 import json
 from rest_framework import permissions
@@ -48,8 +48,7 @@ class parkingareaviewset(viewsets.ModelViewSet):
 class appuserviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = appuser.objects.all()
-    #serializer
-    #...
+    serializer_class = appuserserializer
 
 
 
