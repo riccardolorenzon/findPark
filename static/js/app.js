@@ -54,8 +54,7 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
      var stopTimeout = 5000;
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
         currentTime = new Date().getTime();
-        $scope.drivers_details[0].latestChange = currentTime;
-         console.log("latest change changed");
+        $scope.drivers_details[driver.id].latestChange = currentTime;
         }, true);
 });
 
@@ -105,7 +104,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         details.driver_id = null;
         $scope.drivers_details.push(details);
         var obj = {
-            id: 0,
+            id: i,
             coords: {
                 latitude: 45.4627338,
                 longitude: 9.1777322
@@ -134,9 +133,11 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         for ( i = 0; i < num_drivers; i++) {
             if (typeof $scope.drivers_details[i] == "undefined")
                 return;
+            console.log( i +' th driver lc ' + $scope.drivers_details[i].latestChange);
             console.log(currentTime - $scope.drivers_details[i].latestChange);
             if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
                 // i-th driver parked
+                console.log(i + ' -th driver parked')
                 $http.post('/api/parkingspots/', {status: 'open',
                     'latitude': driver.coords.latitude,
                     'longitude': driver.coords.longitude, 'area': null })
@@ -227,7 +228,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     // check interval(in seconds)
     var checkingInterval = 1000;
 
-    var stopTimeout = 100;
+    var stopTimeout = 10000;
 
     // start all drivers
     for (i = 0; i< num_drivers; i++)
