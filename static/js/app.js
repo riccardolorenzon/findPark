@@ -55,6 +55,7 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
         currentTime = new Date().getTime();
         $scope.drivers_details[driver.id].latestChange = currentTime;
+        $scope.drivers_details[driver.id].park_id = 0;
         }, true);
 });
 
@@ -101,9 +102,11 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
         points = getRandomLocations($scope.map.bounds.northeast, $scope.map.bounds.southwest, $scope.map.center);
         details.start = points[0];
         details.end = points[1];
-        details.driver_id = null;
+        details.park_id = null;
+
         $scope.drivers_details.push(details);
-        var obj = {
+
+        var driver_obj = {
             id: i,
             coords: {
                 latitude: 45.4627338,
@@ -122,27 +125,41 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                 labelClass: "marker-labels"
             }
         }
-        $scope.drivers.push(obj);
+        $scope.drivers.push(driver_obj);
     }
 
     //check called each checkinginterval period
     function checkDriversPosition()
     {
         currentTime = new Date().getTime();
+        var cont = 0;
+
         for ( i = 0; i < num_drivers; i++) {
             if (typeof $scope.drivers_details[i] == "undefined")
                 return;
             if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
-                // i-th driver parked
-                $http.post('/api/parkingspots/', {status: 'open',
-                    'latitude': driver.coords.latitude,
-                    'longitude': driver.coords.longitude, 'area': null })
-                    .success(function (data, status) {
-                        //update_details(data.id);
+                if ($scope.drivers_details[i].park_id == 0)
+                {
+                    console.log(i + " just parked");
+                }
+                else {
+                    // i-th driver parked
+                    $http.post('/api/parkingspots/', {
+                        'status': 'open',
+                        'latitude': driver.coords.latitude,
+                        'longitude': driver.coords.longitude,
+                        'area': null
                     })
-                    .error(function (data, status, headers, config) {
-                        $scope.restData = "error on sending data to the server: " + status;
-                    });
+                        .success(function (data, status) {
+                            console.log(cont + ' ' + data.id);
+                            $scope.drivers_details[cont].park_id = data.id;
+                            cont ++;
+                        })
+                        .error(function (data, status, headers, config) {
+                            $scope.restData = "error on sending data to the server: " + status;
+                        });
+                }
+
             }
         }
     }
