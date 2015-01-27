@@ -55,7 +55,7 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
         currentTime = new Date().getTime();
         $scope.drivers_details[driver.id].latestChange = currentTime;
-        $scope.drivers_details[driver.id].park_id = 0;
+        $scope.drivers_details[driver.id].park_id = null;
         }, true);
 });
 
@@ -138,9 +138,9 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
             if (typeof $scope.drivers_details[i] == "undefined")
                 return;
             if (currentTime - $scope.drivers_details[i].latestChange > stopTimeout) {
-                if ($scope.drivers_details[i].park_id == 0)
+                if ($scope.drivers_details[i].park_id != null)
                 {
-                    console.log(i + " just parked");
+                    console.log(i + " still parked");
                 }
                 else {
                     // i-th driver parked
