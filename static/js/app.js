@@ -151,7 +151,6 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                         'area': null
                     })
                         .success(function (data, status) {
-                            console.log(cont + ' ' + data.id);
                             $scope.drivers_details[cont].park_id = data.id;
                             cont ++;
                         })
@@ -240,7 +239,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     // check interval(in seconds)
     var checkingInterval = 1000;
 
-    var stopTimeout = 10000;
+    var stopTimeout = 100;
 
     // start all drivers
     for (i = 0; i< num_drivers; i++)
