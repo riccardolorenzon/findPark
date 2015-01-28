@@ -56,6 +56,7 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
         currentTime = new Date().getTime();
         $scope.drivers_details[driver.id].latestChange = currentTime;
         $scope.drivers_details[driver.id].park_id = null;
+        //TODO send a DELETE request using the park_id
         }, true);
 });
 
