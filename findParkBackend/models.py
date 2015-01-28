@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import  User
 
 # represents a delimited area of the city/town
 class parkingarea(models.Model):
@@ -21,6 +22,11 @@ class parkingspot(models.Model):
     area = models.ForeignKey(parkingarea, null=True, blank=True, default = None)
     #transport type
     transportcode = models.CharField(max_length=255, blank = True)
+    #fields to avoid collisions between concurrent users
+    creation_user = models.ForeignKey(User)
+    creation_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
+    last_modified_user = models.ForeignKey(User)
+    last_modified_datetime = models.DateTimeField(auto_now=True, auto_now_add=True)
 
 # represents the parking spot history, one object is created for each parking vehicle
 class parkingspothistory(models.Model):
