@@ -23,21 +23,29 @@ class parkingspotviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = parkingspot.objects.all()
     serializer_class = parkingspotserializer
+
     def create(self, request):
         """
             Overrides the create method in order to get
             extra params: the id of the created object.
             When this is done, we pass the method to his parent.
         """
-        serializer = parkingspotserializer(data= request.data)
+        serializer = parkingspotserializer(data = request.data)
         if serializer.is_valid():
             parking_spot = serializer.create(serializer.validated_data)
+            parking_spot.creation_user = request.user
+            parking_spot.last_modified_user = request.user
             parking_spot.save()
             return HttpResponse(json.dumps({'id' : parking_spot.id}),
                             status=status.HTTP_201_CREATED, content_type="application/json")
         else:
             return HttpResponse(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST, content_type="application/json")
+
+    def delete(self, request, pk, format=None):
+        parking_spot = self.get_object(pk)
+        parking_spot.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class parkingareaviewset(viewsets.ModelViewSet):

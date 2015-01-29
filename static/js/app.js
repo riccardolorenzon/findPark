@@ -55,9 +55,18 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
      $scope.$watch('driver.coords.latitude', function (newVal, oldVal) {
         currentTime = new Date().getTime();
         $scope.drivers_details[driver.id].latestChange = currentTime;
-        $scope.drivers_details[driver.id].park_id = null;
-        //TODO send a DELETE request using the park_id
-        }, true);
+        if ($scope.drivers_details[driver.id].park_id != null) {
+            $http.delete('/api/parkingspots/' + $scope.drivers_details[driver.id].park_id + '/')
+                .success(function (data, status) {
+                    console.log('park deleted');
+                })
+                .error(function (data, status, headers, config) {
+                    console.log('error on deleting park');
+                });
+            // park id is set to the default value (null)
+            $scope.drivers_details[driver.id].park_id = null;
+        }
+     }, true);
 });
 
 findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $timeout, uiGmapGoogleMapApi) {

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import datetime
+from django.utils import timezone
 
 # represents a delimited area of the city/town
 class parkingarea(models.Model):
@@ -24,23 +24,10 @@ class parkingspot(models.Model):
     #transport type
     transportcode = models.CharField(max_length=255, blank = True)
     #fields to avoid collisions between concurrent users
-    creation_user = models.ForeignKey(User, related_name="creations_user", default=None)
-    creation_datetime = models.DateTimeField(auto_now=False, auto_now_add=True, default=datetime.datetime.now())
-    last_modified_user = models.ForeignKey(User, related_name="last_modified_user", default=None)
-    last_modified_datetime = models.DateTimeField(auto_now=True, auto_now_add=True, default=datetime.datetime.now())
-
-# represents the parking spot history, one object is created for each parking vehicle
-class parkingspothistory(models.Model):
-    state = models.CharField(max_length=255)
-    ready = models.DateTimeField()
-    occupied = models.DateTimeField()
-    #spot localization
-    latitude = models.DecimalField(max_digits=18, decimal_places=8)
-    longitude = models.DecimalField(max_digits=18, decimal_places=8)
-    #parking area
-    area = models.ForeignKey(parkingarea)
-    #transport type
-    transportcode = models.CharField(max_length=255)
+    creation_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
+    last_modified_datetime = models.DateTimeField(auto_now=True, auto_now_add=True)
+    creation_user = models.CharField(max_length=255, blank=True, null=True)
+    last_modified_user = models.CharField(max_length=255, blank=True, null=True)
 
 # represent the driver user
 class appuser(models.Model):
