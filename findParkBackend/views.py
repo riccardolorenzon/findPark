@@ -42,11 +42,8 @@ class parkingspotviewset(viewsets.ModelViewSet):
             return HttpResponse(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST, content_type="application/json")
 
-    def delete(self, request, pk, format=None):
-        parking_spot = self.get_object(pk)
-        parking_spot.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+    def update(self, request, pk=None):
+        pass
 
 class parkingareaviewset(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)

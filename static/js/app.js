@@ -56,12 +56,14 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
         currentTime = new Date().getTime();
         $scope.drivers_details[driver.id].latestChange = currentTime;
         if ($scope.drivers_details[driver.id].park_id != null) {
-            $http.delete('/api/parkingspots/' + $scope.drivers_details[driver.id].park_id + '/')
+            $http.patch('/api/parkingspots/' + $scope.drivers_details[driver.id].park_id + '/',
+            {
+                'status': 'open'})
                 .success(function (data, status) {
-                    console.log('park deleted');
+                    console.log('parking open');
                 })
                 .error(function (data, status, headers, config) {
-                    console.log('error on deleting park');
+                    console.log('error on opening parking');
                 });
             // park id is set to the default value (null)
             $scope.drivers_details[driver.id].park_id = null;
@@ -153,9 +155,10 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                     console.log(i + " still parked");
                 }
                 else {
+                    console.log(i + "sending post..");
                     // i-th driver parked
                     $http.post('/api/parkingspots/', {
-                        'status': 'open',
+                        'status': 'closed',
                         'latitude': driver.coords.latitude,
                         'longitude': driver.coords.longitude,
                         'area': null
@@ -249,7 +252,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     // check interval(in seconds)
     var checkingInterval = 1000;
 
-    var stopTimeout = 100;
+    var stopTimeout = 10000;
 
     // start all drivers
     for (i = 0; i< num_drivers; i++)
