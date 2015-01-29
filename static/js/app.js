@@ -56,9 +56,10 @@ findparkApp.controller('driverController', function ($scope, $log, $http) {
         currentTime = new Date().getTime();
         $scope.drivers_details[driver.id].latestChange = currentTime;
         if ($scope.drivers_details[driver.id].park_id != null) {
-            $http.patch('/api/parkingspots/' + $scope.drivers_details[driver.id].park_id + '/',
-            {
-                'status': 'open'})
+            $http({
+                method: 'PATCH',
+                url: '/api/parkingspots/' + $scope.drivers_details[driver.id].park_id + '/',
+                data: {'status': 'open'}})
                 .success(function (data, status) {
                     console.log('parking open');
                 })
@@ -155,7 +156,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
                     console.log(i + " still parked");
                 }
                 else {
-                    console.log(i + "sending post..");
+                    console.log(i + " sending post");
                     // i-th driver parked
                     $http.post('/api/parkingspots/', {
                         'status': 'closed',
@@ -252,7 +253,7 @@ findparkApp.controller('mapCtrl', function ( $scope, $http, $log, $interval, $ti
     // check interval(in seconds)
     var checkingInterval = 1000;
 
-    var stopTimeout = 10000;
+    var stopTimeout = 1000;
 
     // start all drivers
     for (i = 0; i< num_drivers; i++)

@@ -42,7 +42,8 @@ class parkingspotviewset(viewsets.ModelViewSet):
             return HttpResponse(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST, content_type="application/json")
 
-    def update(self, request, pk=None):
+    def partial_update(self, request, pk=None):
+        # TODO partial update of parking status
         pass
 
 class parkingareaviewset(viewsets.ModelViewSet):

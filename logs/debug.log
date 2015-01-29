@@ -11564,3 +11564,139 @@ Traceback (most recent call last):
   File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/db/backends/sqlite3/base.py", line 485, in execute
     return Database.Cursor.execute(self, query, params)
 IntegrityError: NOT NULL constraint failed: findParkBackend_parkingspot.creation_user_id
+Internal Server Error: /api/parkingspots/104/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 407, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 404, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/mixins.py", line 76, in partial_update
+    return self.update(request, *args, **kwargs)
+TypeError: update() got an unexpected keyword argument 'partial'
+Internal Server Error: /api/parkingspots/105/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 407, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 404, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/mixins.py", line 76, in partial_update
+    return self.update(request, *args, **kwargs)
+TypeError: update() got an unexpected keyword argument 'partial'
+Internal Server Error: /api/parkingspots/106/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 407, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 404, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/mixins.py", line 76, in partial_update
+    return self.update(request, *args, **kwargs)
+TypeError: update() got an unexpected keyword argument 'partial'
+Internal Server Error: /api/parkingspots/109/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
+Internal Server Error: /api/parkingspots/119/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
+Internal Server Error: /api/parkingspots/118/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
+Internal Server Error: /api/parkingspots/121/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
+Internal Server Error: /api/parkingspots/120/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
+Internal Server Error: /api/parkingspots/123/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
+Internal Server Error: /api/parkingspots/122/
+Traceback (most recent call last):
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/viewsets.py", line 85, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 409, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/Users/riccardo/PycharmProjects/findPark/venv/lib/python2.7/site-packages/rest_framework/views.py", line 340, in finalize_response
+    % type(response)
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<type 'NoneType'>`
