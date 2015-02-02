@@ -7,7 +7,7 @@ FindPark back end is made on the Python/Django stack.
 FindPark front end is made using HTML5, CSS3, Twitter Bootstrap and AngularJS. 
 
 FindPark is deployed(Beta) on Heroku : https://lit-scrubland-6586.herokuapp.com/.
-
+```
 REST api:
 
 POST api-auth/                            : user authentication
@@ -24,3 +24,4 @@ GET api/parkingareas/(?P<pk>[0-9]+)/      : retrieve the parking area identified
 PUT api/parkingareas/(?P<pk>[0-9]+)/      : update all fields of the parking area identified by pk
 PATCH api/parkingareas/(?P<pk>[0-9]+)/    : update only provided fields of the parking area identified by pk
 DELETE api/parkingareas/(?P<pk>[0-9]+)/   : delete the parking area identified by pk
+```
